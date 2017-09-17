@@ -17,7 +17,7 @@ public abstract class Polygon implements Shape {
 
     @Override
     public Composition compose() {
-        Map<Vertex, Integer> map = new HashMap<>();
+        Map<Vertex, Integer> map = new LinkedHashMap<>();
         List<Integer> elements = new ArrayList<>();
         List<Chunk> chunks = new ArrayList<>();
 

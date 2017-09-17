@@ -1,13 +1,11 @@
 package br.unisinos.jgraphicscene.shapes.units;
 
-import java.nio.Buffer;
-import java.nio.FloatBuffer;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Supplier;
 
-public class Versor<T> {
+public class Versor<T> implements Vector<T> {
     List<Supplier<T>> components;
 
     public Versor(List<Supplier<T>> components) {
@@ -42,7 +40,13 @@ public class Versor<T> {
         return components.size();
     }
 
-    public List<Supplier<T>> getComponents() {
+    public T[] getComponents() {
+        T[] components = (T[]) new Object[this.components.size()];
+
+        for (int i = 0; i < this.components.size(); i++) {
+            components[i] = this.components.get(i).get();
+        }
+
         return components;
     }
 }

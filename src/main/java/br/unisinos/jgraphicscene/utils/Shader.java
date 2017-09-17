@@ -1,6 +1,7 @@
 package br.unisinos.jgraphicscene.utils;
 
 import com.jogamp.opengl.GL3;
+import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 import com.jogamp.opengl.util.glsl.ShaderProgram;
 
@@ -26,7 +27,7 @@ public class Shader {
         this.fragment = fragment;
     }
 
-    public void init(GL3 gl) {
+    public void init(GL4 gl) {
         ShaderCode vertexShader = ShaderCode.create(gl, GL_VERTEX_SHADER, this.getClass(), SHADERS_FOLDER, null, this.vertex, "vert", null, true);
         ShaderCode fragmentShader = ShaderCode.create(gl, GL_FRAGMENT_SHADER, this.getClass(), SHADERS_FOLDER, null, this.fragment, "frag", null, true);
 

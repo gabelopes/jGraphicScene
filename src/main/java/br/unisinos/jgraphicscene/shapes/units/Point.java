@@ -5,7 +5,7 @@ import com.jogamp.opengl.util.GLBuffers;
 
 import java.nio.FloatBuffer;
 
-public class Point implements Bufferable<FloatBuffer> {
+public class Point implements Vector<Float>, Bufferable<FloatBuffer> {
     float x, y, z;
 
     public Point() {
@@ -42,5 +42,10 @@ public class Point implements Bufferable<FloatBuffer> {
     @Override
     public FloatBuffer buffer() {
         return GLBuffers.newDirectFloatBuffer(new float[] {this.x, this.y, this.z});
+    }
+
+    @Override
+    public Float[] getComponents() {
+        return new Float[] {x, y, z};
     }
 }

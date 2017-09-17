@@ -5,7 +5,7 @@ import com.jogamp.opengl.util.GLBuffers;
 
 import java.nio.FloatBuffer;
 
-public class Color implements Bufferable<FloatBuffer> {
+public class Color implements Vector<Float>, Bufferable<FloatBuffer> {
     float red, green, blue, alpha;
 
     public Color() {
@@ -47,5 +47,10 @@ public class Color implements Bufferable<FloatBuffer> {
     @Override
     public FloatBuffer buffer() {
         return GLBuffers.newDirectFloatBuffer(new float[] {this.red, this.green, this.blue, this.alpha});
+    }
+
+    @Override
+    public Float[] getComponents() {
+        return new Float[] {red, green, blue, alpha};
     }
 }
