@@ -1,11 +1,10 @@
 package br.unisinos.jgraphicscene.shapes.polygons;
 
-import br.unisinos.jgraphicscene.shapes.units.Color;
-import br.unisinos.jgraphicscene.shapes.units.Point;
-import br.unisinos.jgraphicscene.utils.constants.Colors;
+import br.unisinos.jgraphicscene.units.Color;
+import br.unisinos.jgraphicscene.units.Point;
+import br.unisinos.jgraphicscene.utilities.constants.Colors;
 
 public class Circle extends Ellipse {
-
     public Circle(float radius, int definition, Point center, Color color) {
         super(radius, radius, definition, center, color);
     }
@@ -21,5 +20,4 @@ public class Circle extends Ellipse {
     public Circle(float radius, int definition) {
         this(radius, definition, Colors.BLACK);
     }
-
 }

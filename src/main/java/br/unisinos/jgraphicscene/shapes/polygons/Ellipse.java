@@ -1,11 +1,12 @@
 package br.unisinos.jgraphicscene.shapes.polygons;
 
-import br.unisinos.jgraphicscene.shapes.units.Color;
-import br.unisinos.jgraphicscene.shapes.units.Point;
-import br.unisinos.jgraphicscene.shapes.units.Vertex;
-import br.unisinos.jgraphicscene.utils.constants.Colors;
-import br.unisinos.jgraphicscene.utils.constants.Drawing;
+import br.unisinos.jgraphicscene.units.Color;
+import br.unisinos.jgraphicscene.units.Point;
+import br.unisinos.jgraphicscene.units.Vertex;
+import br.unisinos.jgraphicscene.utilities.constants.Colors;
+import br.unisinos.jgraphicscene.utilities.constants.Mode;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Ellipse extends Polygon {
@@ -55,15 +56,15 @@ public class Ellipse extends Polygon {
     }
 
     private void generateVertices() {
-        this.vertices = new Vertex[definition + 1 + 1]; // definition + center + cycle vertex
-        this.vertices[0] = new Vertex(this.center.getX(), this.center.getY(), this.color);
+        this.vertices = new ArrayList<>(); // definition + center + cycle vertex
+        this.vertices.add(new Vertex(this.center.getX(), this.center.getY(), this.color));
 
         double angleQuotient = 2 * Math.PI / this.definition;
 
         for (int i = 0; i <= this.definition; i++) {
             double angle = i * angleQuotient;
 
-            this.vertices[i + 1] = new Vertex((float)(this.width * Math.cos(angle) + this.center.getX()), (float)(this.height * Math.sin(angle) + this.center.getY()), this.color);
+            this.vertices.add(new Vertex((float)(this.width * Math.cos(angle) + this.center.getX()), (float)(this.height * Math.sin(angle) + this.center.getY()), this.color));
         }
     }
 
@@ -77,7 +78,7 @@ public class Ellipse extends Polygon {
     }
 
     @Override
-    public int getDrawingMode() {
-        return Drawing.GL_TRIANGLE_FAN;
+    public int getMode() {
+        return Mode.GL_TRIANGLE_FAN;
     }
 }

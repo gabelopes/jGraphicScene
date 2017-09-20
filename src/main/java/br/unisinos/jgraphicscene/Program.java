@@ -1,25 +1,30 @@
 package br.unisinos.jgraphicscene;
 
-import br.unisinos.jgraphicscene.graphics.Scene;
-import br.unisinos.jgraphicscene.graphics.opengl.Display;
-import br.unisinos.jgraphicscene.shapes.polygons.Circle;
-import br.unisinos.jgraphicscene.shapes.polygons.Rectangle;
-import br.unisinos.jgraphicscene.shapes.polygons.Triangle;
-import br.unisinos.jgraphicscene.shapes.units.Vertex;
-import br.unisinos.jgraphicscene.utils.constants.Colors;
+import br.unisinos.jgraphicscene.graphics.opengl.Window;
+import br.unisinos.jgraphicscene.shapes.solids.Cube;
+import br.unisinos.jgraphicscene.utilities.Time;
+import br.unisinos.jgraphicscene.utilities.constants.Colors;
 
 public class Program {
     public static void main(String[] args) {
-        Display display = new Display("Graphic Scenes", 1024, 768);
+        Window window = new Window("Graphic Scenes", 1024, 768);
 
-        Triangle triangle = new Triangle(new Vertex(0, 0.5f, Colors.RED), new Vertex(0.5f, -0.5f, Colors.GREEN), new Vertex(-0.5f, -0.5f, Colors.BLUE));
-        Rectangle rectangle = new Rectangle(0.5f, 0.7f, Colors.RED);
-        Circle circle = new Circle(0.5f, 200, Colors.BLUE);
+        Cube cube = new Cube(0.5f, Colors.BLUE);
+        cube.getTransformation().setRotation(() -> Time.getDelta() / 500f, -0.34f, 0.4f, -0.3f);
 
-        display.add(triangle);
-        display.add(rectangle);
-        display.add(circle);
+        Cube cube2 = new Cube(0.3f, Colors.WHITE);
+        cube2.getTransformation().setRotation(() -> Time.getDelta() / 1000f, 0.5f, 0.1f, 0.3f);
 
-        display.open();
+        window.getDrawer().add(cube);
+        window.getDrawer().add(cube2);
+
+//        Composition composition = new Loader(args[0], Colors.BLUE).load();
+//
+//        Obj obj = new Obj(composition);
+//        obj.getTransformation().setRotation(() -> (Time.getDelta()) / 1000f, 1, 0.4f, -0.3f);
+//
+//        window.add(obj);
+
+        window.open();
     }
 }

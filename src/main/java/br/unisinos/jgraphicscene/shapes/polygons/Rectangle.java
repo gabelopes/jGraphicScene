@@ -1,14 +1,29 @@
 package br.unisinos.jgraphicscene.shapes.polygons;
 
-import br.unisinos.jgraphicscene.shapes.units.Color;
-import br.unisinos.jgraphicscene.shapes.units.Point;
-import br.unisinos.jgraphicscene.shapes.units.Vertex;
-import br.unisinos.jgraphicscene.utils.constants.Colors;
-import br.unisinos.jgraphicscene.utils.constants.Drawing;
+import br.unisinos.jgraphicscene.units.Color;
+import br.unisinos.jgraphicscene.units.Point;
+import br.unisinos.jgraphicscene.units.Vertex;
+import br.unisinos.jgraphicscene.utilities.constants.Colors;
+import br.unisinos.jgraphicscene.utilities.constants.Mode;
 
+import java.util.ArrayList;
 import java.util.Collections;
 
 public class Rectangle extends Polygon {
+    public enum Plane {
+        xOy,
+        xOz,
+        yOz
+    }
+
+    /**
+     *  d__c
+     *  |_|
+     * a  b
+     */
+    private Rectangle(Vertex a, Vertex b, Vertex c, Vertex d) {
+        this.addVertices(a, b, c, d);
+    }
 
     public Rectangle(float width, float height) {
         this(width, height, Colors.BLACK);
@@ -19,22 +34,44 @@ public class Rectangle extends Polygon {
     }
 
     public Rectangle(float width, float height, Color color, Point position) {
-        this.vertices = new Vertex[6];
-        this.generateVertices(width, height, color, position);
+        this(
+            new Vertex(position.getX(), position.getY(), color),
+            new Vertex(width + position.getX(), position.getY(), color),
+            new Vertex(width + position.getX(), height + position.getY(), color),
+            new Vertex(position.getX(), height + position.getY(), color)
+        );
     }
 
-    private void generateVertices(float width, float height, Color color, Point position) {
-        this.vertices[0] = new Vertex(position.getX(), position.getY(), color);
-        this.vertices[1] = new Vertex(width + position.getX(), position.getY(), color);
-        this.vertices[2] = new Vertex(width + position.getX(), height + position.getY(), color);
+    public Rectangle(float width, float height, Color color, Point position, Plane plane) {
+        Vertex a, b, c, d;
 
-        this.vertices[3] = new Vertex(position.getX(), position.getY(), color);
-        this.vertices[4] = new Vertex(position.getX(), height + position.getY(), color);
-        this.vertices[5] = new Vertex(width + position.getX(), height + position.getY(), color);
+        if (plane == Plane.xOy) {
+            a = new Vertex(position.getX(), position.getY(), position.getZ(), color);
+            b = new Vertex(width + position.getX(), position.getY(), position.getZ(), color);
+            c = new Vertex(width + position.getX(), height + position.getY(), position.getZ(), color);
+            d = new Vertex(position.getX(), height + position.getY(), position.getZ(), color);
+        } else if (plane == Plane.xOz) {
+            a = new Vertex(position.getX(), position.getY(), position.getZ(), color);
+            b = new Vertex(width + position.getX(), position.getY(), position.getZ(), color);
+            c = new Vertex(width + position.getX(), position.getY(), height + position.getZ(), color);
+            d = new Vertex(position.getX(), position.getY(), height + position.getZ(), color);
+        } else {
+            a = new Vertex(position.getX(), position.getY(), position.getZ(), color);
+            b = new Vertex(position.getX(), width + position.getY(), position.getZ(), color);
+            c = new Vertex(position.getX(), width + position.getY(), height + position.getZ(), color);
+            d = new Vertex(position.getX(), position.getY(), height + position.getZ(), color);
+        }
+
+        this.addVertices(a, b, c, d);
+    }
+
+    private void addVertices(Vertex a, Vertex b, Vertex c, Vertex d) {
+        this.vertices = new ArrayList<>();
+        Collections.addAll(this.vertices, a, b, c, a, d, c);
     }
 
     @Override
-    public int getDrawingMode() {
-        return Drawing.GL_TRIANGLES;
+    public int getMode() {
+        return Mode.GL_TRIANGLES;
     }
 }

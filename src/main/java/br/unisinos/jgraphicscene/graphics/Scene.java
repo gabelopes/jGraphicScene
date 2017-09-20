@@ -1,9 +1,12 @@
 package br.unisinos.jgraphicscene.graphics;
 
+import br.unisinos.jgraphicscene.decorators.Drawable;
+import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.shapes.Shape;
-import br.unisinos.jgraphicscene.shapes.units.Vertex;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.LinkedList;
+import java.util.List;
 
 public class Scene implements Drawable {
     private List<Shape> shapes;
@@ -13,11 +16,12 @@ public class Scene implements Drawable {
     }
 
     public Scene(Shape... shapes) {
-        this(Arrays.asList(shapes));
+        this.shapes = new LinkedList<>();
+        Collections.addAll(this.shapes, shapes);
     }
 
     public Scene() {
-        this(new ArrayList<>());
+        this(new LinkedList<>());
     }
 
     public int add(Shape shape) {
@@ -26,40 +30,9 @@ public class Scene implements Drawable {
     }
 
     @Override
-    public Composition compose() {
-        Map<Vertex, Integer> map = new HashMap<>();
-        List<Integer> elements = new ArrayList<>();
-        List<Chunk> chunks = new ArrayList<>();
-
-        for (Shape shape : shapes) {
-            for (Vertex vertex : shape.getVertices()) {
-                elements.add(this.getIndex(vertex, map));
-            }
-
-            chunks.add(new Chunk(shape.getVertices().size(), shape.getDrawingMode()));
+    public void draw(Composer composer) {
+        for (Shape shape : this.shapes) {
+            shape.draw(composer);
         }
-
-        return new Composition(getVertices(map), elements, chunks);
-    }
-
-    private List<Float> getVertices(Map<Vertex, Integer> map) {
-        List<Float> vertices = new ArrayList<>();
-
-        for (Vertex vertex : map.keySet()) {
-            vertex.grasp(vertices);
-        }
-
-        return vertices;
-    }
-
-    private int getIndex(Vertex vertex, Map<Vertex, Integer> vertexMap) {
-        Integer index = vertexMap.get(vertex);
-
-        if (index == null) {
-            index = vertexMap.size();
-            vertexMap.put(vertex, index);
-        }
-
-        return index;
     }
 }
