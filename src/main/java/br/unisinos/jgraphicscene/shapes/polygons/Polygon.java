@@ -2,7 +2,6 @@ package br.unisinos.jgraphicscene.shapes.polygons;
 
 import br.unisinos.jgraphicscene.shapes.Shape;
 import br.unisinos.jgraphicscene.units.Vertex;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;

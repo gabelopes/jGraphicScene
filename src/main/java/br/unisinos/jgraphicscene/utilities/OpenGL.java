@@ -9,8 +9,8 @@ public class OpenGL {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String location = "Unknown location";
 
-        if (stackTrace.length > 0) {
-            location = stackTrace[0].getClassName() + "." + stackTrace[0].getMethodName();
+        if (stackTrace.length > 2) {
+            location = stackTrace[2].getClassName() + "." + stackTrace[2].getMethodName();
         }
 
         OpenGL.checkError(gl, location);

@@ -43,6 +43,32 @@ public class Composer {
         this.chunks.add(new Chunk(vertices.size(), mode, transformation));
     }
 
+    public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk) {
+        Map<Integer, Integer> mappings = new LinkedHashMap<>();
+
+        for (int i = 0; i < vertices.size(); i++) {
+            Vertex vertex = vertices.get(i);
+            Integer element = this.vertices.get(vertex);
+
+            if (element == null) {
+                int size = this.vertices.size();
+                this.vertices.put(vertex, size);
+                mappings.put(i + 1, size); // Obj indices start at 1
+            } else {
+                mappings.put(i + 1, element); // Obj indices start at 1
+            }
+        }
+
+        this.addMappedElements(elements, mappings);
+        this.chunks.add(chunk);
+    }
+
+    private void addMappedElements(List<Integer> elements, Map<Integer, Integer> mappings) {
+        for (int element : elements) {
+            this.elements.add(mappings.get(element));
+        }
+    }
+
     private Integer getElement(Vertex vertex) {
         Integer element = this.vertices.get(vertex);
 

@@ -3,7 +3,6 @@ package br.unisinos.jgraphicscene.units;
 import br.unisinos.jgraphicscene.decorators.Arrangeable;
 import br.unisinos.jgraphicscene.decorators.Bufferable;
 import com.jogamp.opengl.util.GLBuffers;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.nio.FloatBuffer;

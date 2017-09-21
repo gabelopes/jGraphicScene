@@ -4,7 +4,6 @@ import br.unisinos.jgraphicscene.decorators.Bufferable;
 import br.unisinos.jgraphicscene.units.Versor;
 import com.jogamp.opengl.math.Matrix4;
 import com.jogamp.opengl.util.GLBuffers;
-import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.nio.FloatBuffer;

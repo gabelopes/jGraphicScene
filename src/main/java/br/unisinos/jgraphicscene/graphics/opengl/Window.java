@@ -2,10 +2,10 @@ package br.unisinos.jgraphicscene.graphics.opengl;
 
 import br.unisinos.jgraphicscene.shapes.solids.Cube;
 import br.unisinos.jgraphicscene.units.Color;
-import br.unisinos.jgraphicscene.utilities.structures.Dispatcher;
-import br.unisinos.jgraphicscene.utilities.io.Shader;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
+import br.unisinos.jgraphicscene.utilities.io.Shader;
+import br.unisinos.jgraphicscene.utilities.structures.Dispatcher;
 import com.jogamp.newt.event.*;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -157,8 +157,6 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         keyEvents.attach(KeyEvent.VK_D, e -> this.camera.processKeyboard(Movement.RIGHT));
 
         keyEvents.attach(KeyEvent.VK_SPACE, e -> this.camera.reset(INITIAL_POSITION));
-
-        keyEvents.attach(KeyEvent.VK_TAB, e -> ((Cube)this.getDrawer().get()).getVertices().forEach(v -> v.setColor(Colors.GREEN)));
     }
 
     @Override

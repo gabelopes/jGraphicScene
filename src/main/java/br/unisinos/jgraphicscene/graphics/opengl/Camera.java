@@ -1,5 +1,6 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
+import br.unisinos.jgraphicscene.utilities.Time;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
 import com.jogamp.opengl.math.Matrix4;
 import com.sun.istack.internal.NotNull;
@@ -18,30 +19,37 @@ public class Camera {
 
     private Vector3f position;
 
-    private Vector3f front, up, right;
+    private Vector3f front;
+    private Vector3f up;
+    private Vector3f right;
 
     private Vector3f globalUp;
 
-    private float yaw, pitch;
+    private float yaw;
+    private float pitch;
 
-    private float speed, sensitivity, zoom;
+    private float speed;
+    private float sensitivity;
+    private float zoom;
 
-    private float delta, lastFrame;
+    private float delta;
+    private float frame;
 
-    private float mouseX, mouseY;
+    private float mouseX;
+    private float mouseY;
 
     private Window window;
 
-    public Camera(@NotNull Window window) {
+    public Camera(Window window) {
         this(window, new Vector3f());
     }
 
-    public Camera(@NotNull Window window, Vector3f position) {
+    public Camera(Window window, Vector3f position) {
         this.window = window;
         this.reset(position, GLOBAL_UP);
     }
 
-    public Camera(@NotNull Window window, Vector3f position, Vector3f globalUp) {
+    public Camera(Window window, Vector3f position, Vector3f globalUp) {
         this.window = window;
         this.reset(position, globalUp);
     }
@@ -55,12 +63,12 @@ public class Camera {
     }
 
     public void reset(Vector3f position, Vector3f globalUp) {
-        this.position = position;
+        this.position = position == null ? new Vector3f() : position;
         this.front = FRONT;
         this.up = new Vector3f();
         this.right = new Vector3f();
 
-        this.globalUp = globalUp;
+        this.globalUp = globalUp == null ? new Vector3f() : globalUp;
 
         this.yaw = YAW;
         this.pitch = PITCH;
@@ -68,8 +76,6 @@ public class Camera {
         this.speed = SPEED;
         this.sensitivity = SENSITIVITY;
         this.zoom = ZOOM;
-
-        this.lastFrame = System.currentTimeMillis();
 
         this.mouseX = this.window.getWidth() / 2;
         this.mouseY = this.window.getHeight() / 2;
@@ -162,24 +168,24 @@ public class Camera {
         float velocity = this.speed * this.delta;
 
         if (direction == Movement.FORWARD) {
-            this.position.add(this.front.mul(velocity));
+            this.position.add(this.front.mul(velocity, new Vector3f()));
         } else if (direction == Movement.BACK) {
-            this.position.sub(this.front.mul(velocity));
+            this.position.sub(this.front.mul(velocity, new Vector3f()));
         } else if (direction == Movement.RIGHT) {
-            this.position.add(this.right.mul(velocity));
+            this.position.add(this.right.mul(velocity, new Vector3f()));
         } else {
-            this.position.sub(this.right.mul(velocity));
+            this.position.sub(this.right.mul(velocity, new Vector3f()));
         }
     }
 
-    public void processMovement(float x, float y, boolean constrainPitch) {
+    public void processMovement(float x, float y, boolean restrain) {
         this.yaw += (x - mouseX) * this.sensitivity;
         this.pitch += (mouseY - y) * this.sensitivity;
 
         this.mouseX = x;
         this.mouseY = y;
 
-        if (constrainPitch) {
+        if (restrain) {
             if (this.pitch > 89) {
                 this.pitch = 89;
             } else if (this.pitch < -89) {
@@ -203,10 +209,10 @@ public class Camera {
     }
 
     public void updateDelta() {
-        long currentFrame = System.nanoTime();
+        float currentFrame = Time.getDelta() / 1000f;
 
-        this.delta = (currentFrame - lastFrame) / 1_000_000_000;
-        this.lastFrame = currentFrame;
+        this.delta = currentFrame - frame;
+        this.frame = currentFrame;
     }
 
     private void update() {
