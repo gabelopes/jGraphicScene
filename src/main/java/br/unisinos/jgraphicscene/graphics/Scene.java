@@ -10,14 +10,17 @@ import java.util.List;
 
 public class Scene implements Drawable {
     private List<Shape> shapes;
+    private Transformation transformation;
 
     public Scene(List<Shape> shapes) {
         this.shapes = shapes;
+        this.transformation = new Transformation();
     }
 
     public Scene(Shape... shapes) {
         this.shapes = new LinkedList<>();
         Collections.addAll(this.shapes, shapes);
+        this.transformation = new Transformation();
     }
 
     public Scene() {
@@ -34,5 +37,10 @@ public class Scene implements Drawable {
         for (Shape shape : this.shapes) {
             shape.draw(composer);
         }
+    }
+
+    @Override
+    public Transformation getTransformation() {
+        return this.transformation;
     }
 }

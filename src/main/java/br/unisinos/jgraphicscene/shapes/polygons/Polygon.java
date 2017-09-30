@@ -16,6 +16,8 @@ public abstract class Polygon extends Shape {
 
     @Override
     public int hashCode() {
+        List<Vertex> vertices = this.getVertices();
+
         HashCodeBuilder builder = new HashCodeBuilder(17, 37)
             .appendSuper(super.hashCode())
             .append(vertices);

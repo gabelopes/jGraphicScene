@@ -6,7 +6,6 @@ import br.unisinos.jgraphicscene.shapes.Shape;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.units.Point;
 import br.unisinos.jgraphicscene.units.Vertex;
-import br.unisinos.jgraphicscene.utilities.Lists;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
 import br.unisinos.jgraphicscene.utilities.constants.Mode;
 
@@ -79,7 +78,7 @@ public class Obj extends Shape {
     @Override
     public void draw(Composer composer) {
         Chunk chunk = new Chunk(this.geometricVertices.size(), this.getMode(), this.getTransformation());
-        composer.add(this.getVertices(), this.getVertexElements(), chunk);
+        composer.add(this.getVertices(), this.getVertexElements(), chunk, 1);
     }
 
     @Override

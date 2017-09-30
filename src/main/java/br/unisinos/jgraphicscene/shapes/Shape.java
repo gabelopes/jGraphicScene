@@ -1,7 +1,6 @@
 package br.unisinos.jgraphicscene.shapes;
 
 import br.unisinos.jgraphicscene.decorators.Drawable;
-import br.unisinos.jgraphicscene.decorators.Transformable;
 import br.unisinos.jgraphicscene.graphics.Transformation;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.units.Vertex;
@@ -10,7 +9,7 @@ import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public abstract class Shape implements Drawable, Transformable {
+public abstract class Shape implements Drawable {
     protected Transformation transformation;
 
     public Shape() {

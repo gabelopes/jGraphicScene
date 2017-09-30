@@ -42,6 +42,10 @@ public class Transformation implements Bufferable<FloatBuffer> {
         this.rotation = new Versor<>(angle).add(x, y, z);
     }
 
+    public void setRotation(float angle, float x, float y, float z) {
+        this.rotation = new Versor<>(angle, x, y, z);
+    }
+
     public Matrix4 getMatrix() {
         Matrix4 matrix = new Matrix4();
 

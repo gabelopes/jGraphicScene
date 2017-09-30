@@ -8,12 +8,15 @@ public class OpenGL {
     public static void checkError(GL gl) {
         StackTraceElement[] stackTrace = Thread.currentThread().getStackTrace();
         String location = "Unknown location";
+        String line = " (?)";
 
         if (stackTrace.length > 2) {
-            location = stackTrace[2].getClassName() + "." + stackTrace[2].getMethodName();
+            StackTraceElement element = stackTrace[2];
+            location = element.getClassName() + "." + element.getMethodName();
+            line = " (" +  element.getLineNumber() + ")";
         }
 
-        OpenGL.checkError(gl, location);
+        OpenGL.checkError(gl, location + line);
     }
 
     public static void checkError(GL gl, String location) {

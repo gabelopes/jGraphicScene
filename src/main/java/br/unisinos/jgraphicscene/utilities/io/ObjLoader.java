@@ -1,10 +1,7 @@
 package br.unisinos.jgraphicscene.utilities.io;
 
 import br.unisinos.jgraphicscene.shapes.obj.Obj;
-import br.unisinos.jgraphicscene.units.Point;
-import com.jogamp.opengl.util.GLBuffers;
 import org.apache.commons.io.FileUtils;
-import org.joml.Vector4f;
 
 import java.io.File;
 import java.io.IOException;
@@ -53,7 +50,6 @@ public class ObjLoader {
         } else if ((matcher = FACE.matcher(line)).matches()) {
             ObjLoader.addFace(ObjLoader.getGroups(matcher), obj);
         } else {
-            System.out.println(line);
             return;
         }
     }

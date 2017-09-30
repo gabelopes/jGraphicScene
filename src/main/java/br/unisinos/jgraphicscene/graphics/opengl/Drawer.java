@@ -28,7 +28,7 @@ import static com.jogamp.opengl.GL2ES2.GL_STREAM_DRAW;
 import static com.jogamp.opengl.GL2ES3.*;
 
 public class Drawer extends Ring<Drawable> {
-    private Shader shader;
+    private Shader defaultShader;
 
     private IntBuffer buffers;
     private IntBuffer VAO;
@@ -41,19 +41,19 @@ public class Drawer extends Ring<Drawable> {
         this(new Shader());
     }
 
-    public Drawer(Shader shader) {
-        this(shader, new ArrayList<>());
+    public Drawer(Shader defaultShader) {
+        this(defaultShader, new ArrayList<>());
     }
 
     public Drawer(Drawable... drawables) {
         this(new Shader(), drawables);
     }
 
-    public Drawer(Shader shader, Drawable... drawables) {
+    public Drawer(Shader defaultShader, Drawable... drawables) {
         this.list = new ArrayList<>();
         Collections.addAll(this.list, drawables);
 
-        this.shader = shader;
+        this.defaultShader = defaultShader;
         this.buffers = GLBuffers.newDirectIntBuffer(Buffers.SIZE);
         this.VAO = GLBuffers.newDirectIntBuffer(1);
     }
@@ -62,9 +62,9 @@ public class Drawer extends Ring<Drawable> {
         this(new Shader(), drawables);
     }
 
-    public Drawer(Shader shader, List<Drawable> drawables) {
+    public Drawer(Shader defaultShader, List<Drawable> drawables) {
         this.list = drawables;
-        this.shader = shader;
+        this.defaultShader = defaultShader;
         this.buffers = GLBuffers.newDirectIntBuffer(Buffers.SIZE);
         this.VAO = GLBuffers.newDirectIntBuffer(1);
     }
@@ -80,13 +80,13 @@ public class Drawer extends Ring<Drawable> {
         this.bindBuffers(gl);
         this.initializeVAO(gl);
 
-        this.shader.initialize(gl);
+        this.defaultShader.initialize(gl);
 
         gl.glEnable(GL_DEPTH_TEST);
     }
 
     public void destroy(GL4 gl) {
-        gl.glDeleteProgram(this.shader.getName());
+        gl.glDeleteProgram(this.defaultShader.getName());
         gl.glDeleteVertexArrays(1, this.VAO);
         gl.glDeleteBuffers(Buffers.SIZE, this.buffers);
     }
@@ -159,16 +159,28 @@ public class Drawer extends Ring<Drawable> {
         gl.glClearBufferfv(GL_COLOR, 0, background.getBuffer());
         gl.glClearBufferfv(GL_DEPTH, 0, GLBuffers.newDirectFloatBuffer(1).put(0, 1f));
 
-        gl.glUseProgram(this.shader.getName());
+        gl.glUseProgram(this.defaultShader.getName());
         gl.glBindVertexArray(this.VAO.get(0));
 
-        this.shader.setMatrix(gl,"projection", camera.getProjection());
-        this.shader.setMatrix(gl,"view", camera.getView());
+        this.defaultShader.setMatrix(gl,"projection", camera.getProjection());
+        this.defaultShader.setMatrix(gl,"view", camera.getView());
 
         int offset = 0;
 
         for (Chunk chunk : this.composer.getChunks()) {
-            this.shader.setMatrix(gl, "model", chunk.getTransformation().getMatrix());
+            Shader shader = this.defaultShader;
+
+            if (chunk.hasShader()) {
+                shader = new Shader(chunk.getShader());
+                shader.initialize(gl);
+
+                gl.glUseProgram(shader.getName());
+
+                shader.setMatrix(gl,"projection", camera.getProjection());
+                shader.setMatrix(gl,"view", camera.getView());
+            }
+
+            shader.setMatrix(gl, "model", chunk.getTransformation().getMatrix());
 
             gl.glDrawElements(chunk.getMode(), this.composer.getElements().length, GL_UNSIGNED_INT, offset);
 

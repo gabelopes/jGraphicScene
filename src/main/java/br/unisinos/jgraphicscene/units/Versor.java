@@ -96,4 +96,19 @@ public class Versor<T> implements Arrangeable<T> {
 
         return builder.toHashCode();
     }
+
+    @Override
+    public String toString() {
+        if (this.components.size() <= 0) {
+            return "(Empty)";
+        }
+
+        StringBuilder string = new StringBuilder("(" + this.get(0));
+
+        for (int i = 1; i < this.components.size(); i++) {
+            string.append(", ").append(this.get(i));
+        }
+
+        return string + ")";
+    }
 }

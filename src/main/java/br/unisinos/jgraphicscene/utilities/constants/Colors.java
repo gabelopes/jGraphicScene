@@ -10,4 +10,5 @@ public interface Colors {
     Color BLUE = new Color(0, 0, 1);
     Color TEAL = new Color(0, 0.5f, 0.5f);
     Color PETROL = new Color(0.2f, 0.3f, 0.3f);
+    Color GRAY = new Color(0.5f, 0.5f, 0.5f);
 }

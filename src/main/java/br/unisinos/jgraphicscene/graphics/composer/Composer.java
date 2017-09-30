@@ -44,6 +44,10 @@ public class Composer {
     }
 
     public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk) {
+        this.add(vertices, elements, chunk, 0);
+    }
+
+    public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk, int indexOffset) {
         Map<Integer, Integer> mappings = new LinkedHashMap<>();
 
         for (int i = 0; i < vertices.size(); i++) {
@@ -53,9 +57,9 @@ public class Composer {
             if (element == null) {
                 int size = this.vertices.size();
                 this.vertices.put(vertex, size);
-                mappings.put(i + 1, size); // Obj indices start at 1
+                mappings.put(i + indexOffset, size);
             } else {
-                mappings.put(i + 1, element); // Obj indices start at 1
+                mappings.put(i + indexOffset, element);
             }
         }
 

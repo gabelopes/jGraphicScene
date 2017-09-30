@@ -26,6 +26,10 @@ public class Ring<T> implements Iterator<T> {
         this.list.add(element);
     }
 
+    public void add(T... elements) {
+        Collections.addAll(this.list, elements);
+    }
+
     @Override
     public boolean hasNext() {
         return true;

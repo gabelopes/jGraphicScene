@@ -1,6 +1,5 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
-import br.unisinos.jgraphicscene.shapes.solids.Cube;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
@@ -16,6 +15,7 @@ import com.jogamp.opengl.util.Animator;
 import org.joml.Vector3f;
 
 public class Window implements GLEventListener, KeyListener, MouseListener {
+    private static final float TWO_PI = 2f * (float) Math.PI;
     private static final Vector3f INITIAL_POSITION = new Vector3f(0, 0, 3);
 
     private String title;
@@ -211,7 +211,6 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
     @Override
     public void mousePressed(MouseEvent e) {
-
     }
 
     @Override

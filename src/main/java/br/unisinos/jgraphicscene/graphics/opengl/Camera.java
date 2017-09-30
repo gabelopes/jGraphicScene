@@ -3,7 +3,6 @@ package br.unisinos.jgraphicscene.graphics.opengl;
 import br.unisinos.jgraphicscene.utilities.Time;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
 import com.jogamp.opengl.math.Matrix4;
-import com.sun.istack.internal.NotNull;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
@@ -209,7 +208,7 @@ public class Camera {
     }
 
     public void updateDelta() {
-        float currentFrame = Time.getDelta() / 1000f;
+        float currentFrame = Time.delta() / 1000f;
 
         this.delta = currentFrame - frame;
         this.frame = currentFrame;
