@@ -106,48 +106,54 @@ public class Camera {
         return globalUp;
     }
 
-    public void setGlobalUp(Vector3f globalUp) {
+    public Camera setGlobalUp(Vector3f globalUp) {
         this.globalUp = globalUp;
+        return this;
     }
 
     public float getYaw() {
         return yaw;
     }
 
-    public void setYaw(float yaw) {
+    public Camera setYaw(float yaw) {
         this.yaw = yaw;
+        return this;
     }
 
     public float getPitch() {
         return pitch;
     }
 
-    public void setPitch(float pitch) {
+    public Camera setPitch(float pitch) {
         this.pitch = pitch;
+        return this;
     }
 
     public float getSpeed() {
         return speed;
     }
 
-    public void setSpeed(float speed) {
+    public Camera setSpeed(float speed) {
         this.speed = speed;
+        return this;
     }
 
     public float getSensitivity() {
         return sensitivity;
     }
 
-    public void setSensitivity(float sensitivity) {
+    public Camera setSensitivity(float sensitivity) {
         this.sensitivity = sensitivity;
+        return this;
     }
 
     public float getZoom() {
         return zoom;
     }
 
-    public void setZoom(float zoom) {
+    public Camera setZoom(float zoom) {
         this.zoom = zoom;
+        return this;
     }
 
     public Matrix4f getView() {

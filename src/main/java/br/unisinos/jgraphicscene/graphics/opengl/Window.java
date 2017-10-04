@@ -1,10 +1,15 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
+import br.unisinos.jgraphicscene.decorators.Transformable;
+import br.unisinos.jgraphicscene.graphics.transformations.Plectromorph;
 import br.unisinos.jgraphicscene.units.Color;
+import br.unisinos.jgraphicscene.utilities.constants.Axis;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
+import br.unisinos.jgraphicscene.utilities.constants.Morph;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
 import br.unisinos.jgraphicscene.utilities.io.Shader;
 import br.unisinos.jgraphicscene.utilities.structures.Dispatcher;
+import br.unisinos.jgraphicscene.utilities.structures.Switch;
 import com.jogamp.newt.event.*;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.GLAutoDrawable;
@@ -13,6 +18,14 @@ import com.jogamp.opengl.GLEventListener;
 import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.Animator;
 import org.joml.Vector3f;
+
+import static br.unisinos.jgraphicscene.utilities.constants.Axis.X;
+import static br.unisinos.jgraphicscene.utilities.constants.Axis.Y;
+import static br.unisinos.jgraphicscene.utilities.constants.Axis.Z;
+import static br.unisinos.jgraphicscene.utilities.constants.Morph.ROTATE;
+import static br.unisinos.jgraphicscene.utilities.constants.Morph.SCALE;
+import static br.unisinos.jgraphicscene.utilities.constants.Morph.TRANSLATE;
+import static com.jogamp.newt.event.KeyEvent.*;
 
 public class Window implements GLEventListener, KeyListener, MouseListener {
     private static final float TWO_PI = 2f * (float) Math.PI;
@@ -30,6 +43,9 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
     private Camera camera;
     private Drawer drawer;
+
+    private Switch<Morph> transformations;
+    private Switch<Axis> axes;
 
     private Dispatcher<Short, KeyEvent> keyEvents;
 
@@ -60,7 +76,7 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         this.height = height;
         this.background = background;
 
-        this.camera = new Camera(this, INITIAL_POSITION);
+        this.camera = new Camera(this, INITIAL_POSITION).setSpeed(10);
         this.drawer = drawer == null ? new Drawer() : drawer;
     }
 
@@ -139,28 +155,71 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
     @Override
     public void init(GLAutoDrawable drawable) {
+        this.initSwitches();
         this.initDispatchers();
         this.drawer.initialize(drawable.getGL().getGL4());
     }
 
-    public void initDispatchers() {
+    private void initSwitches() {
+        this.transformations = new Switch<>(SCALE, TRANSLATE, ROTATE);
+        this.axes = new Switch<>(X, Y, Z);
+    }
+
+    private void initDispatchers() {
         keyEvents = new Dispatcher<>();
 
-        keyEvents.attach(KeyEvent.VK_ESCAPE, e -> this.close());
+        keyEvents.attach(VK_ESCAPE, e -> this.close());
 
-        keyEvents.attach(KeyEvent.VK_LEFT, e -> this.getDrawer().previous());
-        keyEvents.attach(KeyEvent.VK_RIGHT, e -> this.getDrawer().next());
+        keyEvents.attach(VK_LEFT, e -> this.getDrawer().previous());
+        keyEvents.attach(VK_RIGHT, e -> this.getDrawer().next());
 
-        keyEvents.attach(KeyEvent.VK_W, e -> this.camera.processKeyboard(Movement.FORWARD));
-        keyEvents.attach(KeyEvent.VK_A, e -> this.camera.processKeyboard(Movement.LEFT));
-        keyEvents.attach(KeyEvent.VK_S, e -> this.camera.processKeyboard(Movement.BACK));
-        keyEvents.attach(KeyEvent.VK_D, e -> this.camera.processKeyboard(Movement.RIGHT));
+        keyEvents.attach(VK_W, e -> this.camera.processKeyboard(Movement.FORWARD));
+        keyEvents.attach(VK_A, e -> this.camera.processKeyboard(Movement.LEFT));
+        keyEvents.attach(VK_S, e -> this.camera.processKeyboard(Movement.BACK));
+        keyEvents.attach(VK_D, e -> this.camera.processKeyboard(Movement.RIGHT));
 
-        keyEvents.attach(KeyEvent.VK_SPACE, e -> this.camera.reset(INITIAL_POSITION));
+        keyEvents.attach(VK_SPACE, e -> this.camera.reset(INITIAL_POSITION));
+
+        keyEvents.attach(VK_E, e -> this.transformations.handle(SCALE));
+        keyEvents.attach(VK_T, e -> this.transformations.handle(TRANSLATE));
+        keyEvents.attach(VK_R, e -> this.transformations.handle(ROTATE));
+
+        keyEvents.attach(VK_X, e -> this.axes.handle(X));
+        keyEvents.attach(VK_Y, e -> this.axes.handle(Y));
+        keyEvents.attach(VK_Z, e -> this.axes.handle(Z));
+
+        keyEvents.attach(VK_UP, e -> this.transform(1));
+        keyEvents.attach(VK_DOWN, e -> this.transform(-1));
+
+        keyEvents.attach(VK_BACK_SPACE, e -> {
+            this.transformations.deactivateAll();
+            this.axes.deactivateAll();
+        });
+    }
+
+    private Plectromorph asPlectromorph() {
+        try {
+            return (Plectromorph) ((Transformable) this.drawer.get()).getTransformation();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    private void transform(float factor) {
+        Plectromorph plectromorph = this.asPlectromorph();
+
+        if (plectromorph != null) {
+            plectromorph.transform(this.transformations, this.axes, factor);
+        }
+    }
+
+    private void updateTitle() {
+        this.window.setTitle(title + " (" + this.transformations.getModifiers() + " in " + this.axes.getModifiers() + ")");
     }
 
     @Override
     public void display(GLAutoDrawable drawable) {
+        this.updateTitle();
         this.getDrawer().draw(drawable.getGL().getGL4(), this.camera, this.background);
     }
 

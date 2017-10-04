@@ -1,19 +1,20 @@
 package br.unisinos.jgraphicscene.shapes;
 
 import br.unisinos.jgraphicscene.decorators.Drawable;
-import br.unisinos.jgraphicscene.graphics.Transformation;
+import br.unisinos.jgraphicscene.decorators.Transformable;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
+import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Vertex;
 import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 
 import java.util.List;
 
-public abstract class Shape implements Drawable {
+public abstract class Shape implements Drawable, Transformable {
     protected Transformation transformation;
 
     public Shape() {
-        this.transformation = new Transformation();
+        this(new Transformation());
     }
 
     public Shape(Transformation transformation) {
@@ -34,7 +35,7 @@ public abstract class Shape implements Drawable {
 
     @Override
     public void draw(Composer composer) {
-        composer.add(this.getMode(), this.getTransformation(), this.getVertices());
+        composer.add(this.getMode(), this.getVertices());
     }
 
     @Override

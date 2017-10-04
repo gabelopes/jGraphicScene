@@ -2,10 +2,11 @@ package br.unisinos.jgraphicscene.units;
 
 import com.jogamp.opengl.util.GLBuffers;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joml.Vector3f;
 
 import java.nio.FloatBuffer;
 
-public class Vertex extends Point {
+public class Vertex extends Vector3f {
     private Color color;
 
     public Vertex(float x, float y, float z, Color color) {
@@ -22,16 +23,12 @@ public class Vertex extends Point {
     }
 
     public Vertex(float x, float y) {
-        super(x, y);
+        this(x, y, 0);
     }
 
     public Vertex(float x, float y, float z, float r, float g, float b) {
-        this(x, y, z, r, g, b, 1);
-    }
-
-    public Vertex(float x, float y, float z, float r, float g, float b, float a) {
         super(x, y, z);
-        this.color = new Color(r, g, b, a);
+        this.color = new Color(r, g, b);
     }
 
     public Vertex(float x, float y, float r, float g, float b) {
@@ -46,14 +43,12 @@ public class Vertex extends Point {
         this.color = color;
     }
 
-    @Override
-    public Float[] arrange() {
-        return new Float[] {x, y, z, color.red, color.green, color.blue, color.alpha};
+    public float[] get() {
+        return new float[] {this.x, this.y, this.z, this.color.x, this.color.y, this.color.z};
     }
 
-    @Override
-    public FloatBuffer getBuffer() {
-        return GLBuffers.newDirectFloatBuffer(new float[] {x, y, z, color.red, color.green, color.blue, color.alpha});
+    public FloatBuffer buffer() {
+        return GLBuffers.newDirectFloatBuffer(this.get());
     }
 
     @Override
@@ -67,5 +62,9 @@ public class Vertex extends Point {
             .appendSuper(super.hashCode())
             .append(color)
             .toHashCode();
+    }
+
+    public static Vertex from(Vector3f position, Vector3f color) {
+        return new Vertex(position.x, position.y, position.z, color.x, color.y, color.z);
     }
 }

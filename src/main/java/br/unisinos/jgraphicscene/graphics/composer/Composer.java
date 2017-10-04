@@ -1,6 +1,6 @@
 package br.unisinos.jgraphicscene.graphics.composer;
 
-import br.unisinos.jgraphicscene.graphics.Transformation;
+import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.Lists;
 
@@ -18,29 +18,21 @@ public class Composer {
     }
 
     public void add(int mode, Vertex... vertices) {
-        this.add(mode, new Transformation(), vertices);
-    }
-
-    public void add(int mode, Transformation transformation, Vertex... vertices) {
         for (Vertex vertex : vertices) {
             Integer element = this.getElement(vertex);
             this.elements.add(element);
         }
 
-        this.chunks.add(new Chunk(vertices.length, mode, transformation));
+        this.chunks.add(new Chunk(vertices.length, mode));
     }
 
     public void add(int mode, List<Vertex> vertices) {
-        this.add(mode, new Transformation(), vertices);
-    }
-
-    public void add(int mode, Transformation transformation, List<Vertex> vertices) {
         for (Vertex vertex : vertices) {
             Integer element = this.getElement(vertex);
             this.elements.add(element);
         }
 
-        this.chunks.add(new Chunk(vertices.size(), mode, transformation));
+        this.chunks.add(new Chunk(vertices.size(), mode));
     }
 
     public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk) {
@@ -88,7 +80,9 @@ public class Composer {
         List<Float> vertices = new ArrayList<>();
 
         for (Vertex vertex : this.vertices.keySet()) {
-            Lists.graft(vertex, vertices);
+            for (float component : vertex.get()) {
+                vertices.add(component);
+            }
         }
 
         return Lists.asFloatArray(vertices);

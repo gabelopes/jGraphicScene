@@ -1,68 +1,50 @@
 package br.unisinos.jgraphicscene.units;
 
-import br.unisinos.jgraphicscene.decorators.Arrangeable;
-import br.unisinos.jgraphicscene.decorators.Bufferable;
 import com.jogamp.opengl.util.GLBuffers;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 import java.nio.FloatBuffer;
 
-public class Color implements Arrangeable<Float>, Bufferable<FloatBuffer> {
-    float red, green, blue, alpha;
-
+public class Color extends Vector3f {
     public Color() {
         this(0, 0, 0);
     }
 
-    public Color(float red, float green, float blue, float alpha) {
-        this.red = red;
-        this.green = green;
-        this.blue = blue;
-        this.alpha = alpha;
-    }
-
     public Color(float red, float green, float blue) {
-        this(red, green, blue, 1);
+        this.x = red;
+        this.y = green;
+        this.z = blue;
     }
 
     public float getRed() {
-        return red;
+        return this.x;
     }
 
     public float getGreen() {
-        return green;
+        return this.y;
     }
 
     public float getBlue() {
-        return blue;
+        return this.z;
     }
 
-    public float getAlpha() {
-        return alpha;
+    public FloatBuffer buffer() {
+        return GLBuffers.newDirectFloatBuffer(new float[] {this.x, this.y, this.z});
     }
 
     @Override
     public String toString() {
-        return "(" + red + ", " + green + ", " + blue + (alpha == 1 ? "" : ", " + alpha) + ")";
-    }
-
-    @Override
-    public FloatBuffer getBuffer() {
-        return GLBuffers.newDirectFloatBuffer(new float[] {red, green, blue, alpha});
-    }
-
-    @Override
-    public Float[] arrange() {
-        return new Float[] {red, green, blue, alpha};
+        return "(" + this.x + ", " + this.y + ", " + this.z + ")";
     }
 
     @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
-            .append(red)
-            .append(green)
-            .append(blue)
-            .append(alpha)
+            .append(this.x)
+            .append(this.y)
+            .append(this.z)
             .toHashCode();
     }
 }
