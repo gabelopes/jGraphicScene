@@ -3,6 +3,7 @@ package br.unisinos.jgraphicscene.shapes;
 import br.unisinos.jgraphicscene.decorators.Drawable;
 import br.unisinos.jgraphicscene.decorators.Transformable;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
+import br.unisinos.jgraphicscene.graphics.transformations.KeyboardTransformation;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Vertex;
 import org.apache.commons.lang3.builder.EqualsBuilder;
@@ -14,7 +15,7 @@ public abstract class Shape implements Drawable, Transformable {
     protected Transformation transformation;
 
     public Shape() {
-        this(new Transformation());
+        this(new KeyboardTransformation());
     }
 
     public Shape(Transformation transformation) {

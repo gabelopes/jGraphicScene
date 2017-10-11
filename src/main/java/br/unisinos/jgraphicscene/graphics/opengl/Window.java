@@ -1,11 +1,11 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
 import br.unisinos.jgraphicscene.decorators.Transformable;
-import br.unisinos.jgraphicscene.graphics.transformations.Plectromorph;
+import br.unisinos.jgraphicscene.graphics.transformations.KeyboardTransformation;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.utilities.constants.Axis;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
-import br.unisinos.jgraphicscene.utilities.constants.Morph;
+import br.unisinos.jgraphicscene.utilities.constants.TransformationType;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
 import br.unisinos.jgraphicscene.utilities.io.Shader;
 import br.unisinos.jgraphicscene.utilities.structures.Dispatcher;
@@ -22,13 +22,12 @@ import org.joml.Vector3f;
 import static br.unisinos.jgraphicscene.utilities.constants.Axis.X;
 import static br.unisinos.jgraphicscene.utilities.constants.Axis.Y;
 import static br.unisinos.jgraphicscene.utilities.constants.Axis.Z;
-import static br.unisinos.jgraphicscene.utilities.constants.Morph.ROTATE;
-import static br.unisinos.jgraphicscene.utilities.constants.Morph.SCALE;
-import static br.unisinos.jgraphicscene.utilities.constants.Morph.TRANSLATE;
+import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.ROTATE;
+import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.SCALE;
+import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.TRANSLATE;
 import static com.jogamp.newt.event.KeyEvent.*;
 
 public class Window implements GLEventListener, KeyListener, MouseListener {
-    private static final float TWO_PI = 2f * (float) Math.PI;
     private static final Vector3f INITIAL_POSITION = new Vector3f(0, 0, 3);
 
     private String title;
@@ -44,7 +43,7 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
     private Camera camera;
     private Drawer drawer;
 
-    private Switch<Morph> transformations;
+    private Switch<TransformationType> transformations;
     private Switch<Axis> axes;
 
     private Dispatcher<Short, KeyEvent> keyEvents;
@@ -76,7 +75,7 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         this.height = height;
         this.background = background;
 
-        this.camera = new Camera(this, INITIAL_POSITION).setSpeed(10);
+        this.camera = new Camera(this, INITIAL_POSITION);
         this.drawer = drawer == null ? new Drawer() : drawer;
     }
 
@@ -197,19 +196,19 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         });
     }
 
-    private Plectromorph asPlectromorph() {
+    private KeyboardTransformation getKeyboardTransformation() {
         try {
-            return (Plectromorph) ((Transformable) this.drawer.get()).getTransformation();
+            return (KeyboardTransformation) ((Transformable) this.drawer.get()).getTransformation();
         } catch (Exception e) {
             return null;
         }
     }
 
     private void transform(float factor) {
-        Plectromorph plectromorph = this.asPlectromorph();
+        KeyboardTransformation keyboardTransformation = this.getKeyboardTransformation();
 
-        if (plectromorph != null) {
-            plectromorph.transform(this.transformations, this.axes, factor);
+        if (keyboardTransformation != null) {
+            keyboardTransformation.transform(this.transformations, this.axes, factor);
         }
     }
 
@@ -221,11 +220,6 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
     public void display(GLAutoDrawable drawable) {
         this.updateTitle();
         this.getDrawer().draw(drawable.getGL().getGL4(), this.camera, this.background);
-    }
-
-    @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        return;
     }
 
     @Override
@@ -247,6 +241,10 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
     @Override
     public void mouseWheelMoved(MouseEvent event) {
         this.camera.processScroll(event.getRotation()[1]);
+    }
+
+    @Override
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
     }
 
     @Override

@@ -5,7 +5,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 /**
- * The Chronomorph is a transformation class that uses the underlying
+ * The TimeTransformation is a transformation class that uses the underlying
  * translation and rotation vectors to establish a rate for transforming
  * things overtime, i.e., the transformation matrix is generated based activate
  * the elapsed time.
@@ -13,14 +13,14 @@ import org.joml.Vector4f;
  * Everytime the transformation matrix is gathered, a time delta is calculated,
  * multiplied by the rates in the vectors and applied in the matrix.
  */
-public class Chronomorph extends Transformation {
+public class TimeTransformation extends Transformation {
     private Vector3f initialTranslation;
 
-    public Chronomorph() {
+    public TimeTransformation() {
         this(new Vector3f());
     }
 
-    public Chronomorph(Vector3f initialTranslation) {
+    public TimeTransformation(Vector3f initialTranslation) {
         super(new Vector3f(), new Vector4f());
         this.initialTranslation = initialTranslation;
     }
@@ -43,6 +43,6 @@ public class Chronomorph extends Transformation {
 
     @Override
     public Vector4f getRotation() {
-        return new Vector4f(this.rotation.x, this.rotation.y, this.rotation.z, Time.secondsDelta());
+        return new Vector4f(new Vector3f(this.rotation.x, this.rotation.y, this.rotation.z).normalize(), Time.secondsDelta());
     }
 }

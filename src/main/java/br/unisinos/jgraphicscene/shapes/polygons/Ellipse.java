@@ -64,7 +64,7 @@ public class Ellipse extends Polygon {
         for (int i = 0; i <= this.definition; i++) {
             double angle = i * angleQuotient;
 
-            this.vertices.add(new Vertex((float)(this.width * Math.cos(angle) + this.center.x), (float)(this.height * Math.sin(angle) + this.center.y), this.color));
+            this.vertices.add(new Vertex((float) (this.width * Math.cos(angle) + this.center.x), (float) (this.height * Math.sin(angle) + this.center.y), this.color));
         }
     }
 
