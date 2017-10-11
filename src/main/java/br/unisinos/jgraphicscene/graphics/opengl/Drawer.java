@@ -1,6 +1,8 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
 import br.unisinos.jgraphicscene.decorators.Drawable;
+import br.unisinos.jgraphicscene.decorators.Lightable;
+import br.unisinos.jgraphicscene.decorators.Transformable;
 import br.unisinos.jgraphicscene.graphics.composer.Chunk;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.units.Color;
@@ -32,6 +34,7 @@ public class Drawer extends Ring<Drawable> {
 
     private IntBuffer buffers;
     private IntBuffer VAO;
+    private IntBuffer lightingVAO;
 
     private int lastHashCode;
 
@@ -80,8 +83,6 @@ public class Drawer extends Ring<Drawable> {
         this.bindBuffers(gl);
         this.initializeVAO(gl);
 
-        this.defaultShader.initialize(gl);
-
         gl.glEnable(GL_DEPTH_TEST);
     }
 
@@ -123,7 +124,7 @@ public class Drawer extends Ring<Drawable> {
 
             {
                 int positionThreshold = 3;
-                int colorThreshold = 4;
+                int colorThreshold = 3;
                 int stride = (positionThreshold + colorThreshold) * Float.BYTES;
                 int offset = 0;
 
@@ -154,36 +155,23 @@ public class Drawer extends Ring<Drawable> {
             this.initialize(gl);
         }
 
+        Shader shader = this.isLightable() ? new Shader("lighting") : this.defaultShader;
+        shader.initialize(gl);
+
         camera.updateDelta();
 
-        gl.glClearBufferfv(GL_COLOR, 0, background.getBuffer());
+        gl.glClearBufferfv(GL_COLOR, 0, background.buffer());
         gl.glClearBufferfv(GL_DEPTH, 0, GLBuffers.newDirectFloatBuffer(1).put(0, 1f));
 
-        gl.glUseProgram(this.defaultShader.getName());
+        gl.glUseProgram(shader.getName());
         gl.glBindVertexArray(this.VAO.get(0));
 
-        this.defaultShader.setMatrix(gl,"projection", camera.getProjection());
-        this.defaultShader.setMatrix(gl,"view", camera.getView());
+        this.configureShader(gl, shader, camera);
 
         int offset = 0;
 
         for (Chunk chunk : this.composer.getChunks()) {
-            Shader shader = this.defaultShader;
-
-            if (chunk.hasShader()) {
-                shader = new Shader(chunk.getShader());
-                shader.initialize(gl);
-
-                gl.glUseProgram(shader.getName());
-
-                shader.setMatrix(gl,"projection", camera.getProjection());
-                shader.setMatrix(gl,"view", camera.getView());
-            }
-
-            shader.setMatrix(gl, "model", chunk.getTransformation().getMatrix());
-
             gl.glDrawElements(chunk.getMode(), this.composer.getElements().length, GL_UNSIGNED_INT, offset);
-
             offset += chunk.getSize();
         }
 
@@ -191,5 +179,26 @@ public class Drawer extends Ring<Drawable> {
         gl.glBindVertexArray(0);
 
         OpenGL.checkError(gl);
+    }
+
+    private void configureShader(GL4 gl, Shader shader, Camera camera) {
+        shader.setMatrix(gl,"projection", camera.getProjection());
+        shader.setMatrix(gl,"view", camera.getView());
+
+        if (this.get() instanceof Transformable) {
+            shader.setMatrix(gl,"model", ((Transformable) this.get()).getTransformation().getMatrix());
+        }
+
+        if (this.isLightable()) {
+            Lightable drawable = (Lightable) this.get();
+            shader.setVector(gl, "objectColor", drawable.getColor());
+            shader.setVector(gl, "lightColor", drawable.getLighting().getColor());
+            shader.setVector(gl, "lightPosition", drawable.getLighting().getPosition());
+            shader.setVector(gl, "viewPosition", camera.getPosition());
+        }
+    }
+
+    private boolean isLightable() {
+        return this.get() instanceof Lightable && ((Lightable) this.get()).applyLighting();
     }
 }

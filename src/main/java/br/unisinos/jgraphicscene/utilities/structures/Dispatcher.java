@@ -26,6 +26,12 @@ public class Dispatcher<K, E> {
         }
     }
 
+    public void attach(Consumer<E> function, K... keys) {
+        for (K key : keys) {
+            this.attach(key, function);
+        }
+    }
+
     public void remove(K key, Consumer<E> function) {
         List<Consumer<E>> functions = this.mappings.get(key);
 

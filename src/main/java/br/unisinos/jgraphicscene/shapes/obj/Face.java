@@ -1,31 +1,41 @@
 package br.unisinos.jgraphicscene.shapes.obj;
 
-import br.unisinos.jgraphicscene.units.Point;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joml.Vector3i;
 
 class Face {
-    private Point vertex;
-    private Point texture;
-    private Point normal;
+    private Vector3i vertex;
+    private Vector3i texture;
+    private Vector3i normal;
 
-    public Face(Point vertex) {
-        this(vertex, new Point(), new Point());
+    public Face(Vector3i vertex) {
+        this(vertex, new Vector3i(), new Vector3i());
     }
 
-    public Face(Point vertex, Point texture, Point normal) {
+    public Face(Vector3i vertex, Vector3i texture, Vector3i normal) {
         this.vertex = vertex;
         this.texture = texture;
         this.normal = normal;
     }
 
-    public Point getVertex() {
+    public Vector3i getVertex() {
         return vertex;
     }
 
-    public Point getNormal() {
+    public Vector3i getNormal() {
         return normal;
     }
 
-    public Point getTexture() {
+    public Vector3i getTexture() {
         return texture;
+    }
+
+    @Override
+    public int hashCode() {
+        return new HashCodeBuilder(17, 37)
+            .append(vertex)
+            .append(texture)
+            .append(normal)
+            .toHashCode();
     }
 }

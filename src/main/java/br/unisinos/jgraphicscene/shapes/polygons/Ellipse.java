@@ -1,10 +1,10 @@
 package br.unisinos.jgraphicscene.shapes.polygons;
 
 import br.unisinos.jgraphicscene.units.Color;
-import br.unisinos.jgraphicscene.units.Point;
 import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
 import br.unisinos.jgraphicscene.utilities.constants.Mode;
+import org.joml.Vector3f;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,10 @@ import java.util.List;
 public class Ellipse extends Polygon {
     private float width, height;
     private int definition;
-    private Point center;
+    private Vector3f center;
     private Color color;
 
-    public Ellipse(float width, float height, int definition, Point center, Color color) {
+    public Ellipse(float width, float height, int definition, Vector3f center, Color color) {
         this.width = width;
         this.height = height;
         this.definition = definition;
@@ -24,10 +24,10 @@ public class Ellipse extends Polygon {
     }
 
     public Ellipse(float width, float height, int definition, Color color) {
-        this(width, height, definition, new Point(), color);
+        this(width, height, definition, new Vector3f(), color);
     }
 
-    public Ellipse(float width, float height, int definition, Point center) {
+    public Ellipse(float width, float height, int definition, Vector3f center) {
         this(width, height, definition, center, Colors.BLACK);
     }
 
@@ -47,7 +47,7 @@ public class Ellipse extends Polygon {
         return definition;
     }
 
-    public Point getCenter() {
+    public Vector3f getCenter() {
         return center;
     }
 
@@ -57,14 +57,14 @@ public class Ellipse extends Polygon {
 
     private void generateVertices() {
         this.vertices = new ArrayList<>(); // definition + center + cycle vertex
-        this.vertices.add(new Vertex(this.center.getX(), this.center.getY(), this.color));
+        this.vertices.add(new Vertex(this.center.x, this.center.y, this.color));
 
         double angleQuotient = 2 * Math.PI / this.definition;
 
         for (int i = 0; i <= this.definition; i++) {
             double angle = i * angleQuotient;
 
-            this.vertices.add(new Vertex((float)(this.width * Math.cos(angle) + this.center.getX()), (float)(this.height * Math.sin(angle) + this.center.getY()), this.color));
+            this.vertices.add(new Vertex((float) (this.width * Math.cos(angle) + this.center.x), (float) (this.height * Math.sin(angle) + this.center.y), this.color));
         }
     }
 

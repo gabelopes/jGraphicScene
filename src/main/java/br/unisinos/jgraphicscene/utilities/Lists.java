@@ -1,7 +1,5 @@
 package br.unisinos.jgraphicscene.utilities;
 
-import br.unisinos.jgraphicscene.decorators.Arrangeable;
-
 import java.util.Collections;
 import java.util.List;
 
@@ -24,9 +22,5 @@ public class Lists {
         }
 
         return array;
-    }
-
-    public static <T> void graft(Arrangeable<T> arrangeable, List<T> list) {
-        Collections.addAll(list, arrangeable.arrange());
     }
 }

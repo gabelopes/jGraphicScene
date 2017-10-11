@@ -1,11 +1,13 @@
 package br.unisinos.jgraphicscene.utilities.io;
 
+import br.unisinos.jgraphicscene.units.Color;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.math.Matrix4;
 import com.jogamp.opengl.util.GLBuffers;
 import com.jogamp.opengl.util.glsl.ShaderCode;
 import com.jogamp.opengl.util.glsl.ShaderProgram;
 import org.joml.Matrix4f;
+import org.joml.Vector3f;
 
 import java.nio.FloatBuffer;
 
@@ -17,6 +19,7 @@ public class Shader {
 
     private int id;
     private String vertex, fragment;
+    private boolean initialized;
 
     public Shader() {
         this( "default");
@@ -32,19 +35,23 @@ public class Shader {
     }
 
     public void initialize(GL4 gl) {
-        ShaderCode vertexShader = ShaderCode.create(gl, GL_VERTEX_SHADER, this.getClass(), SHADERS_FOLDER, null, this.vertex, "vert", null, true);
-        ShaderCode fragmentShader = ShaderCode.create(gl, GL_FRAGMENT_SHADER, this.getClass(), SHADERS_FOLDER, null, this.fragment, "frag", null, true);
+        if (!this.initialized) {
+            this.initialized = true;
 
-        ShaderProgram shaderProgram = new ShaderProgram();
+            ShaderCode vertexShader = ShaderCode.create(gl, GL_VERTEX_SHADER, this.getClass(), SHADERS_FOLDER, null, this.vertex, "vert", null, true);
+            ShaderCode fragmentShader = ShaderCode.create(gl, GL_FRAGMENT_SHADER, this.getClass(), SHADERS_FOLDER, null, this.fragment, "frag", null, true);
 
-        shaderProgram.add(vertexShader);
-        shaderProgram.add(fragmentShader);
+            ShaderProgram shaderProgram = new ShaderProgram();
 
-        shaderProgram.init(gl);
+            shaderProgram.add(vertexShader);
+            shaderProgram.add(fragmentShader);
 
-        this.id = shaderProgram.program();
+            shaderProgram.init(gl);
 
-        shaderProgram.link(gl, System.err);
+            this.id = shaderProgram.program();
+
+            shaderProgram.link(gl, System.err);
+        }
     }
 
     public void setMatrix(GL4 gl, String name, Matrix4 matrix) {
@@ -53,6 +60,19 @@ public class Shader {
 
     public void setMatrix(GL4 gl, String name, Matrix4f matrix) {
         this.setMatrix(gl, name, matrix.get(GLBuffers.newDirectFloatBuffer(16)));
+    }
+
+    public void setVector(GL4 gl, String name, Vector3f vector) {
+        this.setVector(gl, name, vector.x, vector.y, vector.z);
+    }
+
+    public void setVector(GL4 gl, String name, Color color) {
+        this.setVector(gl, name, color.getRed(), color.getGreen(), color.getBlue());
+    }
+
+    public void setVector(GL4 gl, String name,  float x, float y, float z) {
+        int vectorId = gl.glGetUniformLocation(this.getName(), name);
+        gl.glUniform3f(vectorId, x, y, z);
     }
 
     private void setMatrix(GL4 gl, String name, FloatBuffer matrix) {
