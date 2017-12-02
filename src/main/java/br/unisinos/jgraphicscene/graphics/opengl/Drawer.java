@@ -75,10 +75,12 @@ public class Drawer extends Ring<Drawable> {
     public void initialize(GL4 gl) {
         Drawable drawable = this.get();
 
-        this.lastHashCode = drawable.hashCode();
-
         this.composer = new Composer();
-        drawable.draw(this.composer);
+
+        if (drawable != null) {
+            this.lastHashCode = drawable.hashCode();
+            drawable.draw(this.composer);
+        }
 
         this.bindBuffers(gl);
         this.initializeVAO(gl);
@@ -147,7 +149,8 @@ public class Drawer extends Ring<Drawable> {
     }
 
     private boolean hasChanges() {
-        return this.get().hashCode() != this.lastHashCode;
+        Drawable drawable = this.get();
+        return drawable != null && drawable.hashCode() != this.lastHashCode;
     }
 
     public void draw(GL4 gl, Camera camera, Color background) {
@@ -171,7 +174,7 @@ public class Drawer extends Ring<Drawable> {
         int offset = 0;
 
         for (Chunk chunk : this.composer.getChunks()) {
-            gl.glDrawElements(chunk.getMode(), this.composer.getElements().length, GL_UNSIGNED_INT, offset);
+            gl.glDrawElements(chunk.getMode(), chunk.getSize(), GL_UNSIGNED_INT, offset);
             offset += chunk.getSize();
         }
 

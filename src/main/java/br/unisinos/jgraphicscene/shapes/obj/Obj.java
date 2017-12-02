@@ -7,7 +7,7 @@ import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.shapes.Shape;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.units.Vertex;
-import br.unisinos.jgraphicscene.utilities.Vector;
+import br.unisinos.jgraphicscene.utilities.Vectors;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
 import br.unisinos.jgraphicscene.utilities.constants.Mode;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
@@ -47,19 +47,19 @@ public class Obj extends Shape implements Lightable {
     }
 
     public void addVertex(float... coordinates) {
-        this.vertices.add(Vector.from(coordinates));
+        this.vertices.add(Vectors.from(coordinates));
     }
 
     public void addNormal(float... coordinates) {
-        this.normals.add(Vector.from(coordinates));
+        this.normals.add(Vectors.from(coordinates));
     }
 
     public void addTextureCoordinate(float... coordinates) {
-        this.textures.add(Vector.from(coordinates));
+        this.textures.add(Vectors.from(coordinates));
     }
 
     public void addFace(int[] vertex, int[] texture, int[] normal) {
-        this.faces.add(new Face(Vector.from(vertex), Vector.from(texture), Vector.from(normal)));
+        this.faces.add(new Face(Vectors.from(vertex), Vectors.from(texture), Vectors.from(normal)));
     }
 
     @Override
@@ -120,12 +120,13 @@ public class Obj extends Shape implements Lightable {
 
     @Override
     public void draw(Composer composer) {
-        Chunk chunk = new Chunk(this.vertices.size(), this.getMode());
+        List<Integer> elements = this.getElements();
+        Chunk chunk = new Chunk(elements.size(), this.getMode());
 
         if (this.applyLighting()) {
             composer.add(this.getMode(), this.getLightableVertices());
         } else {
-            composer.add(this.getVertices(), this.getElements(), chunk, 1);
+            composer.add(this.getVertices(), elements, chunk, 1);
 
         }
     }

@@ -1,6 +1,5 @@
 package br.unisinos.jgraphicscene.graphics.transformations;
 
-import br.unisinos.jgraphicscene.utilities.Vector;
 import br.unisinos.jgraphicscene.utilities.constants.Axis;
 import br.unisinos.jgraphicscene.utilities.constants.TransformationType;
 import br.unisinos.jgraphicscene.utilities.structures.Switch;

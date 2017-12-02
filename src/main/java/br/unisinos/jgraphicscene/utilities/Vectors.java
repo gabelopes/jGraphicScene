@@ -4,7 +4,7 @@ import com.jogamp.opengl.util.GLBuffers;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
-public class Vector {
+public class Vectors {
     public static Vector3f from(float... coordinates) {
         return new Vector3f(GLBuffers.newDirectFloatBuffer(coordinates));
     }

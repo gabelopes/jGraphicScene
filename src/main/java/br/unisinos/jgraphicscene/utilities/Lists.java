@@ -1,6 +1,5 @@
 package br.unisinos.jgraphicscene.utilities;
 
-import java.util.Collections;
 import java.util.List;
 
 public class Lists {

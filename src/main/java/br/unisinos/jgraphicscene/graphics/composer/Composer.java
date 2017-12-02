@@ -3,6 +3,7 @@ package br.unisinos.jgraphicscene.graphics.composer;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.Lists;
+import br.unisinos.jgraphicscene.utilities.constants.Mode;
 
 import java.util.*;
 
@@ -32,11 +33,7 @@ public class Composer {
             this.elements.add(element);
         }
 
-        this.chunks.add(new Chunk(vertices.size(), mode));
-    }
-
-    public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk) {
-        this.add(vertices, elements, chunk, 0);
+        this.chunks.add(new Chunk(this.elements.size(), mode));
     }
 
     public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk, int indexOffset) {
@@ -57,6 +54,18 @@ public class Composer {
 
         this.addMappedElements(elements, mappings);
         this.chunks.add(chunk);
+    }
+
+    public void add(List<Vertex> vertices, List<Integer> elements, int mode, int indexOffset) {
+        this.add(vertices, elements, new Chunk(elements.size(), mode), indexOffset);
+    }
+
+    public void add(List<Vertex> vertices, List<Integer> elements, int mode) {
+        this.add(vertices, elements, mode, 0);
+    }
+
+    public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk) {
+        this.add(vertices, elements, chunk, 0);
     }
 
     private void addMappedElements(List<Integer> elements, Map<Integer, Integer> mappings) {
