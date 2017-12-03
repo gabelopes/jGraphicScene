@@ -1,14 +1,12 @@
 package br.unisinos.jgraphicscene.obj;
 
-import br.unisinos.jgraphicscene.graphics.Lighting;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.units.Vertex;
-import br.unisinos.jgraphicscene.utilities.Vectors;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
-import br.unisinos.jgraphicscene.utilities.constants.Mode;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector3i;
 
@@ -16,14 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Obj {
-    private List<Vector3f> vertices;
-    private List<Vector3f> normals;
-    private List<Vector3f> textures;
+    public static final String DEFAULT_GROUP = "@default";
 
-    private List<Face> faces;
+    private List<Vector3f> vertices;
+    private List<Vector2f> textures;
+    private List<Vector3f> normals;
+
+    private List<Group> groups;
+    private List<Material> materials;
 
     private Transformation transformation;
-    private Color color;
 
     public Obj() {
         this(Colors.WHITE);
@@ -38,73 +38,80 @@ public class Obj {
         this.normals = new ArrayList<>();
         this.textures = new ArrayList<>();
 
-        this.faces = new ArrayList<>();
+        this.groups = new ArrayList<>();
+        this.materials = new ArrayList<>();
 
         this.transformation = transformation;
-        this.color = color;
     }
 
-    public void addVertex(float... coordinates) {
-        this.vertices.add(Vectors.from(coordinates));
+    public void addVertex(float x, float y, float z) {
+        this.vertices.add(new Vector3f(x, y, z));
     }
 
-    public void addNormal(float... coordinates) {
-        this.normals.add(Vectors.from(coordinates));
+    public void addNormal(float x, float y, float z) {
+        this.normals.add(new Vector3f(x, y, z));
     }
 
-    public void addTextureCoordinate(float... coordinates) {
-        this.textures.add(Vectors.from(coordinates));
+    public void addTexture(float s, float t) {
+        this.textures.add(new Vector2f(s, t));
     }
 
-    public void addFace(int[] vertex, int[] texture, int[] normal) {
-        this.faces.add(new Face(Vectors.from(vertex), Vectors.from(texture), Vectors.from(normal)));
+    public void addGroup(Group group) {
+        this.groups.add(group);
     }
 
-    public List<Vertex> getVertices() {
-        List<Vertex> vertices = new ArrayList<>(this.vertices.size());
+    public void addMaterial(Material material) {
+        this.materials.add(material);
+    }
 
-        for (Face face : this.faces) {
-            Vector3i geometricVertices = face.getVertex();
-            Vector3i normalVertices = face.getNormal();
+    public void setMaterials(List<Material> materials) {
+        this.materials = materials;
+    }
 
-            Vector3f vertexA = this.vertices.get(geometricVertices.x - 1);
-            Vector3f vertexB = this.vertices.get(geometricVertices.y - 1);
-            Vector3f vertexC = this.vertices.get(geometricVertices.z - 1);
+    public List<List<Vertex>> getVertices() {
+        List<List<Vertex>> groupedVertices = new ArrayList<>();
 
-            Vector3f normalA = this.normals.get(normalVertices.x - 1);
-            Vector3f normalB = this.normals.get(normalVertices.y - 1);
-            Vector3f normalC = this.normals.get(normalVertices.z - 1);
+        for (Group group : this.groups) {
+            List<Vertex> vertices = new ArrayList<>(group.getFaces().size() * 3);
 
-            vertices.add(Vertex.from(vertexA, normalA));
-            vertices.add(Vertex.from(vertexB, normalB));
-            vertices.add(Vertex.from(vertexC, normalC));
+            for (Face face : group.getFaces()) {
+                Vector3i geometricVertices = face.getVertex();
+                Vector3i normalVertices = face.getNormal();
+                Vector3i textureVertices = face.getTexture();
+
+                Vector3f vertexA = this.vertices.get(geometricVertices.x - 1);
+                Vector3f vertexB = this.vertices.get(geometricVertices.y - 1);
+                Vector3f vertexC = this.vertices.get(geometricVertices.z - 1);
+
+                Vector3f normalA = this.normals.get(normalVertices.x - 1);
+                Vector3f normalB = this.normals.get(normalVertices.y - 1);
+                Vector3f normalC = this.normals.get(normalVertices.z - 1);
+
+                Vector2f textureA = this.textures.get(textureVertices.x - 1);
+                Vector2f textureB = this.textures.get(textureVertices.y - 1);
+                Vector2f textureC = this.textures.get(textureVertices.z - 1);
+
+                vertices.add(Vertex.from(vertexA, normalA, textureA));
+                vertices.add(Vertex.from(vertexB, normalB, textureB));
+                vertices.add(Vertex.from(vertexC, normalC, textureC));
+            }
+
+            groupedVertices.add(vertices);
         }
 
-        return vertices;
+        return groupedVertices;
     }
 
     public void draw(Composer composer) {
-        composer.add(this.getMode(), this.getVertices(), getTransformation(), getColor());
+        composer.addGrouped(this.getVertices(), getTransformation());
     }
 
-    public int getMode() {
-        return Mode.GL_TRIANGLES;
-    }
-
-    public Color getColor() {
-        return this.color;
-    }
-
-    public Transformation getTransformation() {
+    private Transformation getTransformation() {
         return transformation;
     }
 
     public void setTransformation(Transformation transformation) {
         this.transformation = transformation;
-    }
-
-    public void setColor(Color color) {
-        this.color = color;
     }
 
     @Override
@@ -114,8 +121,7 @@ public class Obj {
             .append(vertices)
             .append(normals)
             .append(textures)
-            .append(faces)
-            .append(color);
+            .append(groups);
 
         for (Vector3f vertex : this.vertices) {
             builder.append(vertex);
@@ -125,12 +131,12 @@ public class Obj {
             builder.append(vertex);
         }
 
-        for (Vector3f vertex : this.textures) {
+        for (Vector2f vertex : this.textures) {
             builder.append(vertex);
         }
 
-        for (Face face : this.faces) {
-            builder.append(face);
+        for (Group group : this.groups) {
+            builder.append(group);
         }
 
         return builder.toHashCode();

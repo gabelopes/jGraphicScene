@@ -5,7 +5,7 @@ import org.joml.Vector3i;
 
 class Face {
     private Vector3i vertex;
-    private Vector3i texture;
+    private Vector3i texture; // Texture is 3i because it is specified as a triplet in the face
     private Vector3i normal;
 
     public Face(Vector3i vertex) {

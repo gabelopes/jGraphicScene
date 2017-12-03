@@ -1,15 +1,9 @@
 package br.unisinos.jgraphicscene.graphics.transformations;
 
-import br.unisinos.jgraphicscene.utilities.constants.Axis;
-import br.unisinos.jgraphicscene.utilities.structures.Switch;
-import com.jogamp.opengl.util.GLBuffers;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
-import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-
-import java.nio.FloatBuffer;
 
 public class Transformation {
     protected Vector3f translation;

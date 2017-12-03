@@ -5,7 +5,6 @@ import br.unisinos.jgraphicscene.utilities.constants.Axis;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
 import br.unisinos.jgraphicscene.utilities.constants.TransformationType;
-import br.unisinos.jgraphicscene.utilities.io.Shader;
 import br.unisinos.jgraphicscene.utilities.structures.Dispatcher;
 import br.unisinos.jgraphicscene.utilities.structures.Switch;
 import com.jogamp.newt.event.*;

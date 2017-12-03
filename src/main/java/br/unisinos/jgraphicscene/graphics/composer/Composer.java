@@ -1,11 +1,9 @@
 package br.unisinos.jgraphicscene.graphics.composer;
 
-import br.unisinos.jgraphicscene.graphics.Lighting;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.Lists;
-import br.unisinos.jgraphicscene.utilities.constants.Mode;
 
 import java.util.*;
 
@@ -20,40 +18,37 @@ public class Composer {
         this.chunks = new LinkedList<>();
     }
 
-    public void add(int mode, Vertex... vertices) {
-        for (Vertex vertex : vertices) {
-            Integer element = this.getElement(vertex);
-            this.elements.add(element);
-        }
-
-        this.chunks.add(new Chunk(vertices.length, mode));
+    public void add(List<Vertex> vertices) {
+        this.add(vertices, null);
     }
 
-    public void add(int mode, List<Vertex> vertices) {
-        for (Vertex vertex : vertices) {
-            Integer element = this.getElement(vertex);
-            this.elements.add(element);
-        }
-
-        this.chunks.add(new Chunk(vertices.size(), mode));
+    public void add(List<Vertex> vertices, Transformation transformation) {
+        this.add(vertices, transformation, null);
     }
 
-    public void add(int mode, List<Vertex> vertices, Transformation transformation) {
+    public void add(List<Vertex> vertices, Transformation transformation, Color color) {
+        Chunk chunk = new Chunk(vertices.size(), transformation, color);
+        this.chunks.add(chunk);
+
         for (Vertex vertex : vertices) {
             Integer element = this.getElement(vertex);
             this.elements.add(element);
         }
-
-        this.chunks.add(new Chunk(vertices.size(), mode, transformation));
     }
 
-    public void add(int mode, List<Vertex> vertices, Transformation transformation, Color color) {
-        for (Vertex vertex : vertices) {
-            Integer element = this.getElement(vertex);
-            this.elements.add(element);
-        }
+    public void addGrouped(List<List<Vertex>> groupedVertices, Transformation transformation) {
+        for (List<Vertex> vertices : groupedVertices) {
+            List<Integer> elements = new ArrayList<>(vertices.size());
 
-        this.chunks.add(new Chunk(vertices.size(), mode, transformation, color));
+            for (Vertex vertex : vertices) {
+                Integer element = this.getElement(vertex);
+                elements.add(element);
+                this.elements.add(element);
+            }
+
+            Chunk chunk = new Chunk(vertices.size(), transformation, elements);
+            this.chunks.add(chunk);
+        }
     }
 
     private Integer getElement(Vertex vertex) {

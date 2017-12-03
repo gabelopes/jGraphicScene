@@ -3,7 +3,6 @@ package br.unisinos.jgraphicscene.units;
 import com.jogamp.opengl.util.GLBuffers;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 import java.nio.FloatBuffer;
 

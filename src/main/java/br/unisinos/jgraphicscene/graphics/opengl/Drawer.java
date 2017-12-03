@@ -7,6 +7,7 @@ import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.utilities.OpenGL;
 import br.unisinos.jgraphicscene.utilities.constants.Buffers;
+import br.unisinos.jgraphicscene.utilities.constants.Mode;
 import br.unisinos.jgraphicscene.utilities.constants.Semantic;
 import br.unisinos.jgraphicscene.utilities.io.Shader;
 import br.unisinos.jgraphicscene.utilities.structures.Ring;
@@ -157,10 +158,8 @@ public class Drawer extends Ring<Scene> {
         int offset = 0;
 
         for (Chunk chunk : this.composer.getChunks()) {
-            shader.setMatrix(gl,"model", chunk.getTransformation().getMatrix());
-            shader.setVector(gl, "objectColor", chunk.getColor());
-
-            gl.glDrawElements(chunk.getMode(), chunk.getSize(), GL_UNSIGNED_INT, offset * Integer.BYTES);
+            this.configureChunk(gl, shader, chunk);
+            gl.glDrawElements(Mode.GL_TRIANGLES, chunk.getSize(), GL_UNSIGNED_INT, offset * Integer.BYTES);
             offset += chunk.getSize();
         }
 
@@ -168,6 +167,11 @@ public class Drawer extends Ring<Scene> {
         gl.glBindVertexArray(0);
 
         OpenGL.checkError(gl);
+    }
+
+    private void configureChunk(GL4 gl, Shader shader, Chunk chunk) {
+        shader.setMatrix(gl,"model", chunk.getTransformation().getMatrix());
+        shader.setVector(gl, "objectColor", chunk.getColor());
     }
 
     private void configureCamera(GL4 gl, Shader shader, Camera camera) {
