@@ -2,7 +2,7 @@ package br.unisinos.jgraphicscene.utilities.io.dto;
 
 import br.unisinos.jgraphicscene.graphics.Lighting;
 import br.unisinos.jgraphicscene.graphics.Scene;
-import br.unisinos.jgraphicscene.shapes.Shape;
+import br.unisinos.jgraphicscene.obj.Obj;
 import com.jsoniter.annotation.JsonObject;
 
 import java.util.List;
@@ -30,7 +30,7 @@ public class SceneDTO implements DTO<Scene> {
     }
 
     public Scene transfer() {
-        List<Shape> objs = this.objs.stream().map(ObjDTO::transfer).collect(Collectors.toList());
+        List<Obj> objs = this.objs.stream().map(ObjDTO::transfer).collect(Collectors.toList());
         Lighting lighting = this.lighting.transfer();
         return new Scene(objs, lighting);
     }

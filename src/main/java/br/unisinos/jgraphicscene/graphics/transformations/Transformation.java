@@ -1,7 +1,10 @@
 package br.unisinos.jgraphicscene.graphics.transformations;
 
+import br.unisinos.jgraphicscene.utilities.constants.Axis;
+import br.unisinos.jgraphicscene.utilities.structures.Switch;
 import com.jogamp.opengl.util.GLBuffers;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.joml.AxisAngle4f;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -11,14 +14,20 @@ import java.nio.FloatBuffer;
 public class Transformation {
     protected Vector3f translation;
     protected Vector4f rotation;
+    protected float scale;
 
     public Transformation() {
         this(new Vector3f(), new Vector4f());
     }
 
     public Transformation(Vector3f translation, Vector4f rotation) {
+        this(translation, rotation, 1);
+    }
+
+    public Transformation(Vector3f translation, Vector4f rotation, float scale) {
         this.translation = translation;
         this.rotation = rotation;
+        this.scale = scale;
     }
 
     public Vector3f getTranslation() {
@@ -45,12 +54,20 @@ public class Transformation {
     }
 
     public Transformation setRotation(float x, float y, float z) {
-        return this.setRotation(0f, x, y, z);
+        return this.setRotation(0, x, y, z);
     }
 
     public Transformation setRotation(float angle, float x, float y, float z) {
         this.rotation = new Vector4f(x, y, z, angle);
         return this;
+    }
+
+    public float getScale() {
+        return scale;
+    }
+
+    public void setScale(float scale) {
+        this.scale = scale;
     }
 
     public Matrix4f getMatrix() {
@@ -60,6 +77,7 @@ public class Transformation {
 
         matrix.identity();
 
+        matrix.scale(this.scale);
         matrix.translate(translation.x, translation.y, translation.z);
         matrix.rotate(rotation.w, rotation.x, rotation.y, rotation.z);
 

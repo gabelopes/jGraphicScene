@@ -1,6 +1,8 @@
 package br.unisinos.jgraphicscene.graphics.composer;
 
+import br.unisinos.jgraphicscene.graphics.Lighting;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
+import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.Lists;
 import br.unisinos.jgraphicscene.utilities.constants.Mode;
@@ -33,45 +35,25 @@ public class Composer {
             this.elements.add(element);
         }
 
-        this.chunks.add(new Chunk(this.elements.size(), mode));
+        this.chunks.add(new Chunk(vertices.size(), mode));
     }
 
-    public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk, int indexOffset) {
-        Map<Integer, Integer> mappings = new LinkedHashMap<>();
-
-        for (int i = 0; i < vertices.size(); i++) {
-            Vertex vertex = vertices.get(i);
-            Integer element = this.vertices.get(vertex);
-
-            if (element == null) {
-                int size = this.vertices.size();
-                this.vertices.put(vertex, size);
-                mappings.put(i + indexOffset, size);
-            } else {
-                mappings.put(i + indexOffset, element);
-            }
+    public void add(int mode, List<Vertex> vertices, Transformation transformation) {
+        for (Vertex vertex : vertices) {
+            Integer element = this.getElement(vertex);
+            this.elements.add(element);
         }
 
-        this.addMappedElements(elements, mappings);
-        this.chunks.add(chunk);
+        this.chunks.add(new Chunk(vertices.size(), mode, transformation));
     }
 
-    public void add(List<Vertex> vertices, List<Integer> elements, int mode, int indexOffset) {
-        this.add(vertices, elements, new Chunk(elements.size(), mode), indexOffset);
-    }
-
-    public void add(List<Vertex> vertices, List<Integer> elements, int mode) {
-        this.add(vertices, elements, mode, 0);
-    }
-
-    public void add(List<Vertex> vertices, List<Integer> elements, Chunk chunk) {
-        this.add(vertices, elements, chunk, 0);
-    }
-
-    private void addMappedElements(List<Integer> elements, Map<Integer, Integer> mappings) {
-        for (int element : elements) {
-            this.elements.add(mappings.get(element));
+    public void add(int mode, List<Vertex> vertices, Transformation transformation, Color color) {
+        for (Vertex vertex : vertices) {
+            Integer element = this.getElement(vertex);
+            this.elements.add(element);
         }
+
+        this.chunks.add(new Chunk(vertices.size(), mode, transformation, color));
     }
 
     private Integer getElement(Vertex vertex) {

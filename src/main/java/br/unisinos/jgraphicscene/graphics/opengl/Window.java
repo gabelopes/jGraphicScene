@@ -1,12 +1,10 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
-import br.unisinos.jgraphicscene.decorators.Transformable;
-import br.unisinos.jgraphicscene.graphics.transformations.KeyboardTransformation;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.utilities.constants.Axis;
 import br.unisinos.jgraphicscene.utilities.constants.Colors;
-import br.unisinos.jgraphicscene.utilities.constants.TransformationType;
 import br.unisinos.jgraphicscene.utilities.constants.Movement;
+import br.unisinos.jgraphicscene.utilities.constants.TransformationType;
 import br.unisinos.jgraphicscene.utilities.io.Shader;
 import br.unisinos.jgraphicscene.utilities.structures.Dispatcher;
 import br.unisinos.jgraphicscene.utilities.structures.Switch;
@@ -19,12 +17,8 @@ import com.jogamp.opengl.GLProfile;
 import com.jogamp.opengl.util.Animator;
 import org.joml.Vector3f;
 
-import static br.unisinos.jgraphicscene.utilities.constants.Axis.X;
-import static br.unisinos.jgraphicscene.utilities.constants.Axis.Y;
-import static br.unisinos.jgraphicscene.utilities.constants.Axis.Z;
-import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.ROTATE;
-import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.SCALE;
-import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.TRANSLATE;
+import static br.unisinos.jgraphicscene.utilities.constants.Axis.*;
+import static br.unisinos.jgraphicscene.utilities.constants.TransformationType.*;
 import static com.jogamp.newt.event.KeyEvent.*;
 
 public class Window implements GLEventListener, KeyListener, MouseListener {
@@ -54,14 +48,6 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
     public Window(String title, int width, int height, Color background) {
         this(title, width, height, background, new Drawer());
-    }
-
-    public Window(String title, int width, int height, String shader) {
-        this(title, width, height, Colors.PETROL, new Drawer(new Shader(shader)));
-    }
-
-    public Window(String title, int width, int height, Color background, String shader) {
-        this(title, width, height, background, new Drawer(new Shader(shader)));
     }
 
 
@@ -187,38 +173,14 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         keyEvents.attach(VK_Y, e -> this.axes.handle(Y));
         keyEvents.attach(VK_Z, e -> this.axes.handle(Z));
 
-        keyEvents.attach(VK_UP, e -> this.transform(1));
-        keyEvents.attach(VK_DOWN, e -> this.transform(-1));
-
         keyEvents.attach(VK_BACK_SPACE, e -> {
             this.transformations.deactivateAll();
             this.axes.deactivateAll();
         });
     }
 
-    private KeyboardTransformation getKeyboardTransformation() {
-        try {
-            return (KeyboardTransformation) ((Transformable) this.drawer.get()).getTransformation();
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private void transform(float factor) {
-        KeyboardTransformation keyboardTransformation = this.getKeyboardTransformation();
-
-        if (keyboardTransformation != null) {
-            keyboardTransformation.transform(this.transformations, this.axes, factor);
-        }
-    }
-
-    private void updateTitle() {
-        this.window.setTitle(title + " (" + this.transformations.getModifiers() + " in " + this.axes.getModifiers() + ")");
-    }
-
     @Override
     public void display(GLAutoDrawable drawable) {
-        this.updateTitle();
         this.getDrawer().draw(drawable.getGL().getGL4(), this.camera, this.background);
     }
 

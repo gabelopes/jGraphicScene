@@ -1,6 +1,6 @@
 package br.unisinos.jgraphicscene.utilities.io;
 
-import br.unisinos.jgraphicscene.shapes.obj.Obj;
+import br.unisinos.jgraphicscene.obj.Obj;
 import org.apache.commons.io.FileUtils;
 
 import java.io.File;

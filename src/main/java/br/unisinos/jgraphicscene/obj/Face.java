@@ -1,4 +1,4 @@
-package br.unisinos.jgraphicscene.shapes.obj;
+package br.unisinos.jgraphicscene.obj;
 
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joml.Vector3i;

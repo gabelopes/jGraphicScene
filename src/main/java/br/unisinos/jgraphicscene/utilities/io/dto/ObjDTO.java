@@ -1,7 +1,7 @@
 package br.unisinos.jgraphicscene.utilities.io.dto;
 
-import br.unisinos.jgraphicscene.graphics.transformations.KeyboardTransformation;
-import br.unisinos.jgraphicscene.shapes.obj.Obj;
+import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
+import br.unisinos.jgraphicscene.obj.Obj;
 import br.unisinos.jgraphicscene.utilities.Classes;
 import br.unisinos.jgraphicscene.utilities.io.ObjLoader;
 import org.joml.Vector3f;
@@ -77,10 +77,9 @@ public class ObjDTO implements DTO<Obj> {
         Obj obj = ObjLoader.load(filename);
 
         if (obj != null) {
-            Vector3f speeds = new Vector3f(scaleSpeed, translationSpeed, rotationSpeed);
             Vector4f rotation = Classes.instance(Vector4f.class, this.rotation);
             Vector3f translation = Classes.instance(Vector3f.class, this.translation);
-            obj.setTransformation(new KeyboardTransformation(translation, rotation, scale, speeds));
+            obj.setTransformation(new Transformation(translation, rotation, this.scale));
         }
 
         return obj;

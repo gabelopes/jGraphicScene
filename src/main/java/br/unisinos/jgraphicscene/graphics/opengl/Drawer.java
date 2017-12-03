@@ -1,8 +1,7 @@
 package br.unisinos.jgraphicscene.graphics.opengl;
 
-import br.unisinos.jgraphicscene.decorators.Drawable;
-import br.unisinos.jgraphicscene.decorators.Lightable;
-import br.unisinos.jgraphicscene.decorators.Transformable;
+import br.unisinos.jgraphicscene.graphics.Lighting;
+import br.unisinos.jgraphicscene.graphics.Scene;
 import br.unisinos.jgraphicscene.graphics.composer.Chunk;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.units.Color;
@@ -29,57 +28,40 @@ import static com.jogamp.opengl.GL.GL_UNSIGNED_INT;
 import static com.jogamp.opengl.GL2ES2.GL_STREAM_DRAW;
 import static com.jogamp.opengl.GL2ES3.*;
 
-public class Drawer extends Ring<Drawable> {
+public class Drawer extends Ring<Scene> {
     private Shader defaultShader;
 
     private IntBuffer buffers;
     private IntBuffer VAO;
-    private IntBuffer lightingVAO;
 
     private int lastHashCode;
 
     private Composer composer;
 
     public Drawer() {
-        this(new Shader());
+        this(new ArrayList<>());
     }
 
-    public Drawer(Shader defaultShader) {
-        this(defaultShader, new ArrayList<>());
+    public Drawer(Scene... scenes) {
+        this(new ArrayList<>());
+        Collections.addAll(this.list, scenes);
     }
 
-    public Drawer(Drawable... drawables) {
-        this(new Shader(), drawables);
-    }
-
-    public Drawer(Shader defaultShader, Drawable... drawables) {
-        this.list = new ArrayList<>();
-        Collections.addAll(this.list, drawables);
-
-        this.defaultShader = defaultShader;
-        this.buffers = GLBuffers.newDirectIntBuffer(Buffers.SIZE);
-        this.VAO = GLBuffers.newDirectIntBuffer(1);
-    }
-
-    public Drawer(List<Drawable> drawables) {
-        this(new Shader(), drawables);
-    }
-
-    public Drawer(Shader defaultShader, List<Drawable> drawables) {
-        this.list = drawables;
-        this.defaultShader = defaultShader;
+    public Drawer(List<Scene> scenes) {
+        this.list = scenes;
+        this.defaultShader = new Shader();
         this.buffers = GLBuffers.newDirectIntBuffer(Buffers.SIZE);
         this.VAO = GLBuffers.newDirectIntBuffer(1);
     }
 
     public void initialize(GL4 gl) {
-        Drawable drawable = this.get();
+        Scene scene = this.get();
 
         this.composer = new Composer();
 
-        if (drawable != null) {
-            this.lastHashCode = drawable.hashCode();
-            drawable.draw(this.composer);
+        if (scene != null) {
+            this.lastHashCode = scene.hashCode();
+            scene.draw(this.composer);
         }
 
         this.bindBuffers(gl);
@@ -149,8 +131,8 @@ public class Drawer extends Ring<Drawable> {
     }
 
     private boolean hasChanges() {
-        Drawable drawable = this.get();
-        return drawable != null && drawable.hashCode() != this.lastHashCode;
+        Scene scene = this.get();
+        return scene != null && scene.hashCode() != this.lastHashCode;
     }
 
     public void draw(GL4 gl, Camera camera, Color background) {
@@ -158,7 +140,7 @@ public class Drawer extends Ring<Drawable> {
             this.initialize(gl);
         }
 
-        Shader shader = this.isLightable() ? new Shader("lighting") : this.defaultShader;
+        Shader shader = new Shader("lighting");
         shader.initialize(gl);
 
         camera.updateDelta();
@@ -169,12 +151,16 @@ public class Drawer extends Ring<Drawable> {
         gl.glUseProgram(shader.getName());
         gl.glBindVertexArray(this.VAO.get(0));
 
-        this.configureShader(gl, shader, camera);
+        this.configureCamera(gl, shader, camera);
+        this.configureLighting(gl, shader, this.get().getLighting());
 
         int offset = 0;
 
         for (Chunk chunk : this.composer.getChunks()) {
-            gl.glDrawElements(chunk.getMode(), chunk.getSize(), GL_UNSIGNED_INT, offset);
+            shader.setMatrix(gl,"model", chunk.getTransformation().getMatrix());
+            shader.setVector(gl, "objectColor", chunk.getColor());
+
+            gl.glDrawElements(chunk.getMode(), chunk.getSize(), GL_UNSIGNED_INT, offset * Integer.BYTES);
             offset += chunk.getSize();
         }
 
@@ -184,24 +170,14 @@ public class Drawer extends Ring<Drawable> {
         OpenGL.checkError(gl);
     }
 
-    private void configureShader(GL4 gl, Shader shader, Camera camera) {
+    private void configureCamera(GL4 gl, Shader shader, Camera camera) {
         shader.setMatrix(gl,"projection", camera.getProjection());
         shader.setMatrix(gl,"view", camera.getView());
-
-        if (this.get() instanceof Transformable) {
-            shader.setMatrix(gl,"model", ((Transformable) this.get()).getTransformation().getMatrix());
-        }
-
-        if (this.isLightable()) {
-            Lightable drawable = (Lightable) this.get();
-            shader.setVector(gl, "objectColor", drawable.getColor());
-            shader.setVector(gl, "lightColor", drawable.getLighting().getColor());
-            shader.setVector(gl, "lightPosition", drawable.getLighting().getPosition());
-            shader.setVector(gl, "viewPosition", camera.getPosition());
-        }
+        shader.setVector(gl, "viewPosition", camera.getPosition());
     }
 
-    private boolean isLightable() {
-        return this.get() instanceof Lightable && ((Lightable) this.get()).applyLighting();
+    private void configureLighting(GL4 gl, Shader shader, Lighting lighting) {
+        shader.setVector(gl, "lightColor", lighting.getColor());
+        shader.setVector(gl, "lightPosition", lighting.getPosition());
     }
 }
