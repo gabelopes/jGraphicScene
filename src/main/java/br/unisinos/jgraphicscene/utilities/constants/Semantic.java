@@ -10,8 +10,8 @@ public final class Semantic {
     public interface Attribute {
         int POSITION = 0;
         int COLOR = 1;
-        int NORMAL = 1;
-        int TEXCOORD = 2;
+        int NORMAL = 2;
+        int TEXCOORD = 3;
         int DRAW_ID = 4;
     }
 

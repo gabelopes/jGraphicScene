@@ -4,6 +4,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -108,5 +109,13 @@ public abstract class Parser<T> {
 
     public String getFilename() {
         return filename;
+    }
+
+    public Path getPath() {
+        return new File(this.getFilename()).toPath().getParent();
+    }
+
+    public String resolvePath(String filename) {
+        return this.getPath().resolve(filename).toString();
     }
 }

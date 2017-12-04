@@ -2,6 +2,8 @@ package br.unisinos.jgraphicscene.obj;
 
 import br.unisinos.jgraphicscene.units.Color;
 
+import java.util.List;
+
 public class Material {
     private String name;
 
@@ -109,5 +111,9 @@ public class Material {
 
     public void setIlluminationModel(int illuminationModel) {
         this.illuminationModel = illuminationModel;
+    }
+
+    public String[] getMaps() {
+        return new String[] { this.getAmbientMap(), this.getDiffuseMap(), this.getSpecularMap() };
     }
 }

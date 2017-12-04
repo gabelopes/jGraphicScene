@@ -31,7 +31,6 @@ public class MaterialParser extends Parser<List<Material>> {
             .handle(MAP_KA, this::setAmbientMap)
             .handle(MAP_KD, this::setDiffuseMap)
             .handle(MAP_KS, this::setSpecularMap)
-            .ignore(COMMENT)
         ;
     }
 
@@ -86,20 +85,22 @@ public class MaterialParser extends Parser<List<Material>> {
     }
 
     private void setAmbientMap(String[] args) {
-        String filename = args[0];
+        String ambientMap = args[0];
+        String filename = this.resolvePath(ambientMap);
         this.currentMaterial.setAmbientMap(filename);
     }
 
     private void setDiffuseMap(String[] args) {
-        String filename = args[0];
+        String diffuseMap = args[0];
+        String filename = this.resolvePath(diffuseMap);
         this.currentMaterial.setDiffuseMap(filename);
     }
 
     private void setSpecularMap(String[] args) {
-        String filename = args[0];
+        String specularMap = args[0];
+        String filename = this.resolvePath(specularMap);
         this.currentMaterial.setSpecularMap(filename);
     }
-
 
     public static List<Material> parse(String filename) {
         return new MaterialParser(filename).parse();

@@ -54,12 +54,14 @@ public class Shader {
         }
     }
 
-    public void setMatrix(GL4 gl, String name, Matrix4 matrix) {
-        this.setMatrix(gl, name, GLBuffers.newDirectFloatBuffer(matrix.getMatrix()));
+    public void setFloat(GL4 gl, String name, float value) {
+        int var = gl.glGetUniformLocation(this.getName(), name);
+        gl.glUniform1f(var, value);
     }
 
-    public void setMatrix(GL4 gl, String name, Matrix4f matrix) {
-        this.setMatrix(gl, name, matrix.get(GLBuffers.newDirectFloatBuffer(16)));
+    public void setInt(GL4 gl, String name, int value) {
+        int var = gl.glGetUniformLocation(this.getName(), name);
+        gl.glUniform1i(var, value);
     }
 
     public void setVector(GL4 gl, String name, Vector3f vector) {
@@ -73,6 +75,14 @@ public class Shader {
     public void setVector(GL4 gl, String name,  float x, float y, float z) {
         int vectorId = gl.glGetUniformLocation(this.getName(), name);
         gl.glUniform3f(vectorId, x, y, z);
+    }
+
+    public void setMatrix(GL4 gl, String name, Matrix4 matrix) {
+        this.setMatrix(gl, name, GLBuffers.newDirectFloatBuffer(matrix.getMatrix()));
+    }
+
+    public void setMatrix(GL4 gl, String name, Matrix4f matrix) {
+        this.setMatrix(gl, name, matrix.get(GLBuffers.newDirectFloatBuffer(16)));
     }
 
     private void setMatrix(GL4 gl, String name, FloatBuffer matrix) {

@@ -4,8 +4,6 @@ import br.unisinos.jgraphicscene.obj.Group;
 import br.unisinos.jgraphicscene.obj.Obj;
 import org.joml.Vector3i;
 
-import java.io.File;
-
 import static br.unisinos.jgraphicscene.utilities.io.parsers.RegularExpressions.*;
 
 public class ObjParser extends Parser<Obj> {
@@ -62,7 +60,7 @@ public class ObjParser extends Parser<Obj> {
 
     private void addMaterials(String[] args) {
         String mtllib = args[0];
-        String filename = new File(this.getFilename()).toPath().getParent().resolve(mtllib).toString();
+        String filename = this.resolvePath(mtllib);
         this.obj.setMaterials(MaterialParser.parse(filename));
     }
 

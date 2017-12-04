@@ -4,18 +4,19 @@ import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.obj.Material;
 import br.unisinos.jgraphicscene.utilities.Lists;
 import com.jogamp.opengl.util.GLBuffers;
+import com.jogamp.opengl.util.texture.Texture;
 
 import java.nio.IntBuffer;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public final class Chunk {
     private int size;
-
     private List<Integer> elements;
-
-    private Transformation transformation;
     private Material material;
+    private Transformation transformation;
+    private Map<String, Texture> textures;
 
     private IntBuffer bufferVAO;
     private IntBuffer bufferEBO;
@@ -25,6 +26,7 @@ public final class Chunk {
         this.elements = elements;
         this.material = material;
         this.transformation = transformation == null ? new Transformation() : transformation;
+        this.textures = new HashMap<>();
         this.bufferVAO = GLBuffers.newDirectIntBuffer(1);
         this.bufferEBO = GLBuffers.newDirectIntBuffer(1);
     }
@@ -41,11 +43,7 @@ public final class Chunk {
         return material;
     }
 
-    public List<Integer> getElements() {
-        return elements;
-    }
-
-    public int[] getElementsArray() {
+    public int[] getElements() {
         return Lists.asIntegerArray(this.elements);
     }
 
@@ -55,6 +53,14 @@ public final class Chunk {
 
     public IntBuffer getBufferEBO() {
         return bufferEBO;
+    }
+
+    public Map<String, Texture> getTextures() {
+        return textures;
+    }
+
+    public Texture getTexture(String name) {
+        return this.textures.get(name);
     }
 
     public boolean hasVAO() {

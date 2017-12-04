@@ -6,6 +6,7 @@ import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.Lists;
 
 import java.util.*;
+
 import static java.util.Map.Entry;
 
 public class Composer {
