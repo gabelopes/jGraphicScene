@@ -11,7 +11,9 @@ import org.joml.Vector3f;
 import org.joml.Vector3i;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class Obj {
     public static final String DEFAULT_GROUP = "@default";
@@ -68,8 +70,8 @@ public class Obj {
         this.materials = materials;
     }
 
-    public List<List<Vertex>> getVertices() {
-        List<List<Vertex>> groupedVertices = new ArrayList<>();
+    public Map<Material, List<Vertex>> getGroups() {
+        Map<Material, List<Vertex>> groups = new HashMap<>();
 
         for (Group group : this.groups) {
             List<Vertex> vertices = new ArrayList<>(group.getFaces().size() * 3);
@@ -96,14 +98,18 @@ public class Obj {
                 vertices.add(Vertex.from(vertexC, normalC, textureC));
             }
 
-            groupedVertices.add(vertices);
+            groups.put(this.getMaterial(group.getMaterial()), vertices);
         }
 
-        return groupedVertices;
+        return groups;
+    }
+
+    private Material getMaterial(String material) {
+        return this.materials.stream().filter(m -> m.getName().equals(material)).findFirst().orElse(null);
     }
 
     public void draw(Composer composer) {
-        composer.addGrouped(this.getVertices(), getTransformation());
+        composer.add(this.getGroups(), getTransformation());
     }
 
     private Transformation getTransformation() {

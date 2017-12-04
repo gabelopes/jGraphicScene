@@ -26,7 +26,7 @@ public class Vertex extends Vector3f {
     }
 
     public float[] get() {
-        return new float[] {this.x, this.y, this.z, this.normal.x, this.normal.y, this.normal.z};
+        return new float[] {this.x, this.y, this.z, this.normal.x, this.normal.y, this.normal.z, this.texture.x, this.texture.y};
     }
 
     public FloatBuffer buffer() {

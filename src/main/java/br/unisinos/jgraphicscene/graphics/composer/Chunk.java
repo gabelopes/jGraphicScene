@@ -1,9 +1,9 @@
 package br.unisinos.jgraphicscene.graphics.composer;
 
-import br.unisinos.jgraphicscene.graphics.Lighting;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
-import br.unisinos.jgraphicscene.units.Color;
-import br.unisinos.jgraphicscene.utilities.constants.Colors;
+import br.unisinos.jgraphicscene.obj.Material;
+import br.unisinos.jgraphicscene.utilities.Lists;
+import com.jogamp.opengl.util.GLBuffers;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -11,31 +11,22 @@ import java.util.List;
 
 public final class Chunk {
     private int size;
-    private Transformation transformation;
+
     private List<Integer> elements;
-    private Color color;
 
-    private IntBuffer VAO;
-    private IntBuffer EBO;
+    private Transformation transformation;
+    private Material material;
 
+    private IntBuffer bufferVAO;
+    private IntBuffer bufferEBO;
 
-    public Chunk(int size, Transformation transformation) {
-        this(size, transformation, new ArrayList<>());
-    }
-
-    public Chunk(int size, Transformation transformation, Color color) {
-        this(size, transformation, new ArrayList<>(), color);
-    }
-
-    public Chunk(int size, Transformation transformation, List<Integer> elements) {
-        this(size, transformation, elements, Colors.WHITE);
-    }
-
-    public Chunk(int size, Transformation transformation, List<Integer> elements, Color color) {
+    public Chunk(int size, List<Integer> elements, Material material, Transformation transformation) {
         this.size = size;
-        this.transformation = transformation == null ? new Transformation() : transformation;
-        this.color = color == null ? Colors.WHITE : color;
         this.elements = elements;
+        this.material = material;
+        this.transformation = transformation == null ? new Transformation() : transformation;
+        this.bufferVAO = GLBuffers.newDirectIntBuffer(1);
+        this.bufferEBO = GLBuffers.newDirectIntBuffer(1);
     }
 
     public int getSize() {
@@ -46,7 +37,39 @@ public final class Chunk {
         return transformation;
     }
 
-    public Color getColor() {
-        return color;
+    public Material getMaterial() {
+        return material;
+    }
+
+    public List<Integer> getElements() {
+        return elements;
+    }
+
+    public int[] getElementsArray() {
+        return Lists.asIntegerArray(this.elements);
+    }
+
+    public IntBuffer getBufferVAO() {
+        return bufferVAO;
+    }
+
+    public IntBuffer getBufferEBO() {
+        return bufferEBO;
+    }
+
+    public boolean hasVAO() {
+        return this.bufferVAO.get(0) > 0;
+    }
+
+    public boolean hasEBO() {
+        return this.bufferEBO.get(0) > 0;
+    }
+
+    public int getVAO() {
+        return this.bufferVAO.get(0);
+    }
+
+    public int getEBO() {
+        return this.bufferEBO.get(0);
     }
 }
