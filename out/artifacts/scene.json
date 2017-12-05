@@ -1,0 +1,23 @@
+[{
+    "name": "Scene2",
+    "objs": [{
+        "filename": "D:\\Workspace\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+        "rotation": [1.89, 1, 0, 0],
+        "scale": 1,
+        "translation": [0, 0, 0],
+        "transformationType": "Keyboard",
+        "texture": {
+            "normalMap": "bunny.png",
+            "sepecularMap": "bunny_spec.png"
+        }
+    }, {
+        "filename": "D:\\Workspace\\jGraphicScene\\out\\artifacts\\cow\\uvmappedcow.obj",
+        "rotation": [0, 0, 0, 0],
+        "scale": 1,
+        "translation": [1, 1, 1]
+    }],
+    "lighting": {
+        "position": [-1, -1, -1],
+        "color": [1, 1, 1]
+    }
+}]

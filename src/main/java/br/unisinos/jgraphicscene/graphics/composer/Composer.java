@@ -1,7 +1,7 @@
 package br.unisinos.jgraphicscene.graphics.composer;
 
+import br.unisinos.jgraphicscene.graphics.Material;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
-import br.unisinos.jgraphicscene.obj.Material;
 import br.unisinos.jgraphicscene.units.Vertex;
 import br.unisinos.jgraphicscene.utilities.Lists;
 

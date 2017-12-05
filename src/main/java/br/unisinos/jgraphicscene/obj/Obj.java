@@ -1,5 +1,6 @@
 package br.unisinos.jgraphicscene.obj;
 
+import br.unisinos.jgraphicscene.graphics.Material;
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.units.Color;

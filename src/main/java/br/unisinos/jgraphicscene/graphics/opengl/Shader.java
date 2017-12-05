@@ -1,4 +1,4 @@
-package br.unisinos.jgraphicscene.utilities.io;
+package br.unisinos.jgraphicscene.graphics.opengl;
 
 import br.unisinos.jgraphicscene.units.Color;
 import com.jogamp.opengl.GL4;
@@ -22,7 +22,7 @@ public class Shader {
     private boolean initialized;
 
     public Shader() {
-        this( "default");
+        this("default");
     }
 
     public Shader(String name) {

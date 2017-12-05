@@ -1,7 +1,8 @@
-package br.unisinos.jgraphicscene.obj;
+package br.unisinos.jgraphicscene.graphics;
 
 import br.unisinos.jgraphicscene.units.Color;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class Material {
@@ -11,9 +12,9 @@ public class Material {
     private Color diffuseColor;
     private Color specularColor;
 
-    private String ambientMap;
-    private String diffuseMap;
-    private String specularMap;
+    private Texture ambientMap;
+    private Texture diffuseMap;
+    private Texture specularMap;
 
     private float opacity;
     private float shininess;
@@ -57,27 +58,27 @@ public class Material {
         this.specularColor = specularColor;
     }
 
-    public String getAmbientMap() {
+    public Texture getAmbientMap() {
         return ambientMap;
     }
 
-    public void setAmbientMap(String ambientMap) {
+    public void setAmbientMap(Texture ambientMap) {
         this.ambientMap = ambientMap;
     }
 
-    public String getDiffuseMap() {
+    public Texture getDiffuseMap() {
         return diffuseMap;
     }
 
-    public void setDiffuseMap(String diffuseMap) {
+    public void setDiffuseMap(Texture diffuseMap) {
         this.diffuseMap = diffuseMap;
     }
 
-    public String getSpecularMap() {
+    public Texture getSpecularMap() {
         return specularMap;
     }
 
-    public void setSpecularMap(String specularMap) {
+    public void setSpecularMap(Texture specularMap) {
         this.specularMap = specularMap;
     }
 
@@ -113,7 +114,7 @@ public class Material {
         this.illuminationModel = illuminationModel;
     }
 
-    public String[] getMaps() {
-        return new String[] { this.getAmbientMap(), this.getDiffuseMap(), this.getSpecularMap() };
+    public List<Texture> getTextures() {
+        return Arrays.asList(ambientMap, diffuseMap, specularMap);
     }
 }

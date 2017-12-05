@@ -1,6 +1,7 @@
 package br.unisinos.jgraphicscene.utilities.io.parsers;
 
-import br.unisinos.jgraphicscene.obj.Material;
+import br.unisinos.jgraphicscene.graphics.Material;
+import br.unisinos.jgraphicscene.graphics.Texture;
 import br.unisinos.jgraphicscene.units.Color;
 
 import java.util.ArrayList;
@@ -87,19 +88,19 @@ public class MaterialParser extends Parser<List<Material>> {
     private void setAmbientMap(String[] args) {
         String ambientMap = args[0];
         String filename = this.resolvePath(ambientMap);
-        this.currentMaterial.setAmbientMap(filename);
+        this.currentMaterial.setAmbientMap(new Texture(filename));
     }
 
     private void setDiffuseMap(String[] args) {
         String diffuseMap = args[0];
         String filename = this.resolvePath(diffuseMap);
-        this.currentMaterial.setDiffuseMap(filename);
+        this.currentMaterial.setDiffuseMap(new Texture(filename));
     }
 
     private void setSpecularMap(String[] args) {
         String specularMap = args[0];
         String filename = this.resolvePath(specularMap);
-        this.currentMaterial.setSpecularMap(filename);
+        this.currentMaterial.setSpecularMap(new Texture(filename));
     }
 
     public static List<Material> parse(String filename) {
