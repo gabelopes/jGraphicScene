@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class SceneLoader {
+
+
     public static List<Scene> load(String file) {
         try {
             String json = FileUtils.readFileToString(new File(file), Charset.defaultCharset());

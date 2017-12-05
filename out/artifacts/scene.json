@@ -2,19 +2,18 @@
     "name": "Scene2",
     "objs": [{
         "filename": "D:\\Workspace\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
-        "rotation": [1.89, 1, 0, 0],
+        "rotation": [0, 0, 0, 0],
         "scale": 1,
         "translation": [0, 0, 0],
-        "transformationType": "Keyboard",
         "texture": {
             "normalMap": "bunny.png",
             "sepecularMap": "bunny_spec.png"
         }
     }, {
-        "filename": "D:\\Workspace\\jGraphicScene\\out\\artifacts\\cow\\uvmappedcow.obj",
+        "filename": "D:\\Workspace\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
         "rotation": [0, 0, 0, 0],
-        "scale": 1,
-        "translation": [1, 1, 1]
+        "scale": 0.3,
+        "translation": [10, 0, 0]
     }],
     "lighting": {
         "position": [-1, -1, -1],

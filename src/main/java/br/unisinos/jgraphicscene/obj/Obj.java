@@ -113,7 +113,7 @@ public class Obj {
         composer.add(this.getGroups(), getTransformation());
     }
 
-    private Transformation getTransformation() {
+    public Transformation getTransformation() {
         return transformation;
     }
 

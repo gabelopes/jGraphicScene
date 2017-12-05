@@ -8,6 +8,7 @@ import org.joml.Vector3f;
 import org.joml.Vector4f;
 
 public class ObjDTO implements DTO<Obj> {
+    private String id;
     private String filename;
     private Float[] translation;
     private Float[] rotation;

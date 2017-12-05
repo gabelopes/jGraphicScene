@@ -14,6 +14,10 @@ public class Transformation {
         this(new Vector3f(), new Vector4f());
     }
 
+    public Transformation(Vector3f translation) {
+        this(translation, new Vector4f());
+    }
+
     public Transformation(Vector3f translation, Vector4f rotation) {
         this(translation, rotation, 1);
     }

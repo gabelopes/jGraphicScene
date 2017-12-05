@@ -298,7 +298,7 @@ public class Drawer extends Ring<Scene> {
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            data.destroy();
+            //data.destroy();
             texture.setId(id);
         }
 
