@@ -55,6 +55,10 @@ public class Ring<T> implements Iterator<T> {
         return null;
     }
 
+    public boolean isEmpty() {
+        return this.list.isEmpty();
+    }
+
     @Override
     public void remove() {
         this.remove(index);

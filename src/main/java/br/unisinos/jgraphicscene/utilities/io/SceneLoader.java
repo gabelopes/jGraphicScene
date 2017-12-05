@@ -7,6 +7,7 @@ import org.apache.commons.io.FileUtils;
 
 import java.io.File;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -22,7 +23,7 @@ public class SceneLoader {
             return Arrays.stream(sceneDTO).map(SceneDTO::transfer).collect(Collectors.toList());
         } catch (Exception e) {
             e.printStackTrace(System.err);
-            return null;
+            return new ArrayList<>();
         }
     }
 }

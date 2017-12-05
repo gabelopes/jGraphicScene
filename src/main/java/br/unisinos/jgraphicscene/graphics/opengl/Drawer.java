@@ -12,9 +12,7 @@ import br.unisinos.jgraphicscene.utilities.constants.Semantic;
 import br.unisinos.jgraphicscene.utilities.structures.Ring;
 import com.jogamp.opengl.GL4;
 import com.jogamp.opengl.util.GLBuffers;
-import com.jogamp.opengl.util.texture.TextureData;
 
-import java.nio.Buffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.*;
@@ -32,14 +30,10 @@ import static com.jogamp.opengl.GL2ES3.GL_FRONT_AND_BACK;
 import static com.jogamp.opengl.GL2ES3.GL_LINEAR;
 import static com.jogamp.opengl.GL2ES3.GL_LINEAR_MIPMAP_LINEAR;
 import static com.jogamp.opengl.GL2ES3.GL_REPEAT;
-import static com.jogamp.opengl.GL2ES3.GL_TEXTURE0;
-import static com.jogamp.opengl.GL2ES3.GL_TEXTURE1;
-import static com.jogamp.opengl.GL2ES3.GL_TEXTURE_2D;
 import static com.jogamp.opengl.GL2ES3.GL_TEXTURE_MAG_FILTER;
 import static com.jogamp.opengl.GL2ES3.GL_TEXTURE_MIN_FILTER;
 import static com.jogamp.opengl.GL2ES3.GL_TEXTURE_WRAP_S;
 import static com.jogamp.opengl.GL2ES3.GL_TEXTURE_WRAP_T;
-import static com.jogamp.opengl.GL2ES3.GL_UNSIGNED_BYTE;
 import static com.jogamp.opengl.GL2GL3.GL_FILL;
 
 public class Drawer extends Ring<Scene> {
@@ -92,7 +86,6 @@ public class Drawer extends Ring<Scene> {
             gl.glDeleteVertexArrays(1, chunk.getBufferEBO());
         }
 
-        this.unloadTextures(gl);
         gl.glDeleteBuffers(2, this.buffers);
     }
 
@@ -250,9 +243,6 @@ public class Drawer extends Ring<Scene> {
         this.shader.setVector(gl, "light.diffuse", material.getDiffuseColor());
         this.shader.setVector(gl, "light.specular", material.getSpecularColor());
 
-        this.shader.setInt(gl, "material.diffuse", 0);
-        this.shader.setInt(gl, "material.specular", 1);
-
         this.shader.setFloat(gl, "material.shininess", material.getShininess());
     }
 
@@ -260,13 +250,18 @@ public class Drawer extends Ring<Scene> {
         this.loadTextures(gl, material);
 
         if (material.getDiffuseMap() != null) {
-            gl.glActiveTexture(GL_TEXTURE0);
-            gl.glBindTexture(GL_TEXTURE_2D, material.getDiffuseMap().getId());
+            this.shader.setInt(gl, "material.diffuse", material.getDiffuseMap().getTexture().getTarget());
+
+            material.getDiffuseMap().getTexture().bind(gl);
         }
 
+        OpenGL.checkError(gl);
+
         if (material.getSpecularMap() != null) {
-            gl.glActiveTexture(GL_TEXTURE1);
-            gl.glBindTexture(GL_TEXTURE_2D, material.getSpecularMap().getId());
+            this.shader.setInt(gl, "material.specular", material.getSpecularMap().getTexture().getTarget());
+
+            material.getSpecularMap().getTexture().enable(gl);
+            material.getSpecularMap().getTexture().bind(gl);
         }
     }
 
@@ -277,39 +272,13 @@ public class Drawer extends Ring<Scene> {
     private void loadTextures(GL4 gl, Material material) {
         List<Texture> textures = material.getTextures().stream().filter(t -> t != null && !t.isBound()).collect(Collectors.toList());
 
-        IntBuffer textureIds = GLBuffers.newDirectIntBuffer(textures.size());
-        gl.glGenTextures(textures.size(), textureIds);
+        for (Texture texture : textures) {
+            texture.read();
 
-        for (int i = 0; i < textures.size(); i++) {
-            int id = textureIds.get(i);
-            Texture texture = textures.get(i);
-            TextureData data = texture.read(gl);
-            Buffer buffer = data.getBuffer();
-
-            gl.glBindTexture(GL_TEXTURE_2D, id);
-            gl.glTexImage2D(GL_TEXTURE_2D, 0, data.getInternalFormat(), data.getWidth(), data.getHeight(), data.getBorder(), data.getInternalFormat(), GL_UNSIGNED_BYTE, buffer);
-
-            if (data.getMipmap()) {
-                gl.glGenerateMipmap(GL_TEXTURE_2D);
-            }
-
-            gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
-            //data.destroy();
-            texture.setId(id);
+            texture.getTexture().setTexParameteri(gl, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            texture.getTexture().setTexParameteri(gl, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            texture.getTexture().setTexParameteri(gl, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            texture.getTexture().setTexParameteri(gl, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         }
-
-        this.textureBuffers.put(material.getName(), textureIds);
-    }
-
-    private void unloadTextures(GL4 gl) {
-        for (IntBuffer buffer : this.textureBuffers.values()) {
-            gl.glDeleteTextures(buffer.capacity(), buffer);
-        }
-
-        this.textureBuffers.clear();
     }
 }

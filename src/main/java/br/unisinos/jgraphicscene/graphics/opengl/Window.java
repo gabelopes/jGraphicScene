@@ -108,6 +108,10 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
             return;
         }
 
+        if (this.drawer.isEmpty()) {
+            return;
+        }
+
         GLProfile glProfile = GLProfile.get(GLProfile.GL4);
         GLCapabilities glCapabilities = new GLCapabilities(glProfile);
 
