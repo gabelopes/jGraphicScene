@@ -10,6 +10,7 @@
       "name": "Rotation",
       "properties": {
         "y": 1,
+        "z": 1,
         "speed": 0.1
       }
     },
