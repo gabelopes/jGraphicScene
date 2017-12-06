@@ -1,0 +1,68 @@
+[{ // É um array, pois pode-se criar várias cenas dentro de um .json (e trocar a cena usando as setas do teclado)
+  "name": "Solar System", // Este nome aparece no título da janela
+  "light": [1, 1, 1], // Posição da luz
+  "background": [0, 0, 0], // Cor do fundo da janela na cena
+  "objs": [{
+    "id": "sun", // Propriedade opcional, serve para registrar um obj globalmente e referenciá-lo posteriormente em alguma animação descrita nesse arquivo
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene\\bola.obj",
+    "scale": 1, // Configurações iniciais do obj: position, translation e scale (Algumas animações têm maior precendência e podem sobrescrever esses!)
+    "transformation": { // Declaração da animação do obj
+      "name": "Rotation", // O nome da animação (deve existir uma classe com esse nome no pacote br.unisinos.jgraphicscene.utilities.io.dto.transformations)
+      "properties": { // As propriedades que a classe aceita
+        "y": 1,
+        "z": 1,
+        "speed": 0.1
+      }
+    },
+    "materials": { // Esse parâmetro serve para dar um overwrite de alguns (ou todos, fique à vontade) materiais do arquivo .mtl
+      "material_0": { // Esse nome deve ser igual ao declarado no .mtl (caso não haja um .mtl no caminho relativo do obj, pode-se adicionar um material com nome '@default' e ele será usado)
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene", // Caminho relativo para facilitar a declaração dos arquivos de textura abaixo
+        "ambientColor": [1, 1, 1], // Ka
+        "diffuseColor": [0, 0, 0], // Kd
+        "specularColor": [1, 1, 1], // Ks
+        "diffuseMap": "sun.jpg", // map_Kd
+        "specularMap": "white_s.jpg", // map_Ks
+        "shininess": 2 // shininess
+        // Esses são os usados por enquanto, mas já é feito o parsing dos parâmetros 'd', 'illum', 'Ns' e 'map_Ka' caso precise usar no shader
+      }
+    }
+  }, {// Mais objs na cena!
+    "id": "mercury",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "translation": [1, 1, 1],
+    "scale": 0.014,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "mercury.jpg",
+        "specularMap": "mercury_s.jpg",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround", // Esse é outro exemplo de animação (é nesse que implementei a curva paramétrica para simular a rotação dos planetas!)
+      "properties": {
+        "watch": "sun", // Veja que aqui o ID do sol declarado acima é passado para esse parâmetro que se traduz num Obj de verdade dentro do código e serve para pegar a translation desse Obj para usar como centro na animação
+        "speed": 1,
+        "plane": "yOz", // Planos suportados: xOy, xOz, yOz, é possível mudar o ângulo da animação passando um parâmetro 'inclination' => ou seja todos os possíveis tipos de planos suportados!!!
+        "radius": 86.85, // Raio a partir do centro
+        "rotation": { // Rotação em torno de si mesmo
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }]
+}, { // Mais cenas no mesmo arquivo :)
+  "name": "Minha vaca rotatória",
+  "light": [5, 1.2, -9],
+  "background": [1, 0.76, 0.3],
+  "objs": [{
+    // ... segue a mesma ideia
+  }]
+}]
