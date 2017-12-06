@@ -225,9 +225,9 @@
       "name": "WalkAround",
       "properties": {
         "watch": "sun",
-        "speed": 1,
+        "speed": 0.0041,
         "plane": "yOz",
-        "radius": 0.0041,
+        "radius": 358.875,
         "rotation": {
           "x": 0,
           "y": 1,
