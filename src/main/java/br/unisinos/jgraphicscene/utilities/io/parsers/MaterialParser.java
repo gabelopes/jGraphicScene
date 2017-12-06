@@ -32,7 +32,14 @@ public class MaterialParser extends Parser<List<Material>> {
             .handle(MAP_KA, this::setAmbientMap)
             .handle(MAP_KD, this::setDiffuseMap)
             .handle(MAP_KS, this::setSpecularMap)
+            .handle(SHININESS, this::setShininess)
+            .ignore(COMMENT)
         ;
+    }
+
+    private void setShininess(String[] strings) {
+        float s = Integer.parseInt(strings[0]);
+        this.currentMaterial.setShininess(s);
     }
 
     @Override

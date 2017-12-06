@@ -30,6 +30,7 @@ public class RegularExpressions {
     static final Pattern MAP_KA = id("map_Ka");
     static final Pattern MAP_KD = id("map_Kd");
     static final Pattern MAP_KS = id("map_Ks");
+    static final Pattern SHININESS = scalard("shininess");
 
     // Other
     static final Pattern COMMENT = Pattern.compile("^\\s*#.*$");

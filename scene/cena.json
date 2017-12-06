@@ -1,0 +1,282 @@
+[{
+  "name": "Solar System",
+  "light": [1, 1, 1],
+  "background": [0, 0, 0],
+  "objs": [{
+    "id": "sun",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene\\bola.obj",
+    "scale": 1,
+    "transformation": {
+      "name": "Rotation",
+      "properties": {
+        "y": 1,
+        "speed": 0.1
+      }
+    },
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [0, 0, 0],
+        "specularColor": [1, 1, 1],
+        "diffuseMap": "sun.bmp",
+        "specularMap": "white_s.bmp",
+        "shininess": 2
+      }
+    }
+  }, {
+    "id": "mercury",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "scale": 0.014,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "mercury.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 1,
+        "plane": "yOz",
+        "radius": 86.85,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "venus",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "scale": 0.035,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "venus.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 0.78,
+        "plane": "yOz",
+        "radius": 54.1,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "earth",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "rotation": [1, 0, 0, 0],
+    "scale": 0.036,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 1],
+        "diffuseMap": "earth.bmp",
+        "specularMap": "earth_s.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 0.48,
+        "plane": "yOz",
+        "radius": 74.8,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "mars",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "rotation": [1, 0, 0, 0],
+    "scale": 0.019,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "mars.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 0.256,
+        "plane": "yOz",
+        "radius": 227.9,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "jupiter",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "rotation": [1, 0, 0, 0],
+    "scale": 0.411,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "jupiter.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 0.015,
+        "plane": "yOz",
+        "radius": 25.948,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "saturn",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "rotation": [1, 0, 0, 0],
+    "scale": 0.346,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "saturn.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 0.0059,
+        "plane": "yOz",
+        "radius": 79.26,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "uranus",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "rotation": [1, 0, 0, 0],
+    "scale": 0.147,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "uranus.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 1,
+        "plane": "yOz",
+        "radius": 0.0041,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "neptune",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\out\\artifacts\\bola\\bola.obj",
+    "rotation": [1, 0, 0, 0],
+    "scale": 0.142,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "neptune.bmp",
+        "shininess": 1
+      }
+    },
+    "transformation": {
+      "name": "WalkAround",
+      "properties": {
+        "watch": "sun",
+        "speed": 0.0021,
+        "plane": "yOz",
+        "radius": 562.2875,
+        "rotation": {
+          "x": 0,
+          "y": 1,
+          "z": 0,
+          "speed": 0.75
+        }
+      }
+    }
+  }, {
+    "id": "galaxy",
+    "filename": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene\\bola.obj",
+    "scale": 90,
+    "materials": {
+      "material_0": {
+        "path": "C:\\Users\\i841748\\Workspace\\Repositories\\jGraphicScene\\scene",
+        "ambientColor": [1, 1, 1],
+        "diffuseColor": [1, 1, 1],
+        "specularColor": [0, 0, 0],
+        "diffuseMap": "milky_way.bmp",
+        "specularMap": "white_s.bmp",
+        "shininess": 20000
+      }
+    }
+  }]
+}]

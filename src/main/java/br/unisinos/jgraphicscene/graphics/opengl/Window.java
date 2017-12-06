@@ -103,6 +103,10 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         this.window.addKeyListener(this);
         this.window.addMouseListener(this);
 
+//        this.window.confinePointer(true);
+//        this.window.setPointerVisible(false);
+        this.window.warpPointer(this.getWidth() / 2, this.getHeight() / 2);
+
         this.animator = new Animator(this.window);
         this.animator.start();
 
@@ -233,6 +237,7 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
     }
 
     @Override
-    public void mouseDragged(MouseEvent e) {
+    public void mouseDragged(MouseEvent event) {
+        this.camera.processMovement(event.getX(), event.getY(), true);
     }
 }

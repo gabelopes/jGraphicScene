@@ -48,6 +48,8 @@ public class ObjDTO implements DTO<Obj> {
 
             if (transformation != null) {
                 obj.setTransformation(this.transformation.transferForConfiguration(translation, rotation, scale));
+            } else {
+                obj.setTransformation(new Transformation(translation, rotation, scale));
             }
 
             if (materials != null) {
