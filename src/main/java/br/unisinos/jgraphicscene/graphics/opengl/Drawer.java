@@ -203,7 +203,7 @@ public class Drawer extends Ring<Scene> {
             this.bindChunk(gl, chunk);
             this.bindTextures(gl, chunk.getMaterial());
 
-            gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // todo Is this needed?
+            gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
             gl.glDrawElements(Mode.GL_TRIANGLES, chunk.getSize(), GL_UNSIGNED_INT, 0);
         }
 
@@ -278,7 +278,7 @@ public class Drawer extends Ring<Scene> {
 
             gl.glBindTexture(GL_TEXTURE_2D, id);
             gl.glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
-            gl.glTexImage2D(GL_TEXTURE_2D, 0, data.getInternalFormat(), data.getWidth(), data.getHeight(), data.getBorder(), data.getInternalFormat(), GL_UNSIGNED_BYTE, buffer);
+            gl.glTexImage2D(GL_TEXTURE_2D, 0, data.getInternalFormat(), data.getWidth(), data.getHeight(), data.getBorder(), data.getPixelFormat(), GL_UNSIGNED_BYTE, buffer);
             gl.glGenerateMipmap(GL_TEXTURE_2D);
 
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);

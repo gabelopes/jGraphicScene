@@ -19,8 +19,8 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [0, 0, 0],
         "specularColor": [1, 1, 1],
-        "diffuseMap": "sun.bmp",
-        "specularMap": "white_s.bmp",
+        "diffuseMap": "sun.jpg",
+        "specularMap": "white_s.jpg",
         "shininess": 2
       }
     }
@@ -34,7 +34,8 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "mercury.bmp",
+        "diffuseMap": "mercury.jpg",
+        "specularMap": "mercury_s.jpg",
         "shininess": 1
       }
     },
@@ -63,7 +64,8 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "venus.bmp",
+        "diffuseMap": "venus.jpg",
+        "specularMap": "venus_s.jpg",
         "shininess": 1
       }
     },
@@ -93,8 +95,8 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 1],
-        "diffuseMap": "earth.bmp",
-        "specularMap": "earth_s.bmp",
+        "diffuseMap": "earth.jpg",
+        "specularMap": "earth_s.jpg",
         "shininess": 1
       }
     },
@@ -124,7 +126,8 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "mars.bmp",
+        "diffuseMap": "mars.jpg",
+        "specularMap": "mars_s.jpg",
         "shininess": 1
       }
     },
@@ -154,7 +157,7 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "jupiter.bmp",
+        "diffuseMap": "jupiter.jpg",
         "shininess": 1
       }
     },
@@ -184,7 +187,7 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "saturn.bmp",
+        "diffuseMap": "saturn.jpg",
         "shininess": 1
       }
     },
@@ -214,7 +217,7 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "uranus.bmp",
+        "diffuseMap": "uranus.jpg",
         "shininess": 1
       }
     },
@@ -244,7 +247,7 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "neptune.bmp",
+        "diffuseMap": "neptune.jpg",
         "shininess": 1
       }
     },
@@ -273,8 +276,8 @@
         "ambientColor": [1, 1, 1],
         "diffuseColor": [1, 1, 1],
         "specularColor": [0, 0, 0],
-        "diffuseMap": "milky_way.bmp",
-        "specularMap": "white_s.bmp",
+        "diffuseMap": "milky_way.jpg",
+        "specularMap": "white_s.jpg",
         "shininess": 20000
       }
     }
