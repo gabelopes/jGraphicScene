@@ -1,6 +1,7 @@
 package br.unisinos.jgraphicscene.units;
 
 import com.jogamp.opengl.util.GLBuffers;
+import org.apache.commons.lang3.builder.EqualsBuilder;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
@@ -39,10 +40,26 @@ public class Vertex extends Vector3f {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Vertex vertex = (Vertex) o;
+
+        return new EqualsBuilder()
+            .appendSuper(super.equals(o))
+            .append(getNormal(), vertex.getNormal())
+            .append(texture, vertex.texture)
+            .isEquals();
+    }
+
+    @Override
     public int hashCode() {
         return new HashCodeBuilder(17, 37)
             .appendSuper(super.hashCode())
             .append(normal)
+            .append(texture)
             .toHashCode();
     }
 

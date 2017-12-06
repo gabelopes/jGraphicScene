@@ -55,13 +55,13 @@ public class Shader {
     }
 
     public void setFloat(GL4 gl, String name, float value) {
-        int var = gl.glGetUniformLocation(this.getName(), name);
-        gl.glUniform1f(var, value);
+        int floatId = gl.glGetUniformLocation(this.getName(), name);
+        gl.glUniform1f(floatId, value);
     }
 
     public void setInt(GL4 gl, String name, int value) {
-        int var = gl.glGetUniformLocation(this.getName(), name);
-        gl.glUniform1i(var, value);
+        int intId = gl.glGetUniformLocation(this.getName(), name);
+        gl.glUniform1i(intId, value);
     }
 
     public void setVector(GL4 gl, String name, Vector3f vector) {

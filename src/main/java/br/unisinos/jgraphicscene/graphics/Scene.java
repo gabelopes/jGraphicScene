@@ -2,6 +2,8 @@ package br.unisinos.jgraphicscene.graphics;
 
 import br.unisinos.jgraphicscene.graphics.composer.Composer;
 import br.unisinos.jgraphicscene.obj.Obj;
+import br.unisinos.jgraphicscene.units.Color;
+import br.unisinos.jgraphicscene.utilities.constants.Colors;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,6 +14,7 @@ public class Scene {
     private String name;
     private List<Obj> objs;
     private Lighting lighting;
+    private Color background;
 
     public Scene(String name, List<Obj> objs) {
         this(name, objs, new Lighting());
@@ -27,9 +30,14 @@ public class Scene {
     }
 
     public Scene(String name, List<Obj> objs, Lighting lighting) {
+        this(name, objs, lighting, Colors.PETROL);
+    }
+
+    public Scene(String name, List<Obj> objs, Lighting lighting, Color background) {
         this.name = name;
         this.objs = objs;
         this.lighting = lighting;
+        this.background = background;
     }
 
     public Scene(List<Obj> objs) {
@@ -74,5 +82,13 @@ public class Scene {
 
     public void setLighting(Lighting lighting) {
         this.lighting = lighting;
+    }
+
+    public Color getBackground() {
+        return background;
+    }
+
+    public void setBackground(Color background) {
+        this.background = background;
     }
 }

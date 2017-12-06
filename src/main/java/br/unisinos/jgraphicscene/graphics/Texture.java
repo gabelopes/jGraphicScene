@@ -16,6 +16,7 @@ public class Texture {
 
     public TextureData read(GL4 gl) {
         try {
+            System.out.println("Reading image " + filename + "...");
             return TextureIO.newTextureData(gl.getGLProfile(), new File(this.filename), false, null);
         } catch (Exception e) {
             e.printStackTrace();

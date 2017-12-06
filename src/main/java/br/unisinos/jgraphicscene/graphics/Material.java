@@ -66,6 +66,10 @@ public class Material {
         this.ambientMap = ambientMap;
     }
 
+    public void setAmbientMap(String filename) {
+        this.setAmbientMap(filename == null ? null : new Texture(filename));
+    }
+
     public Texture getDiffuseMap() {
         return diffuseMap;
     }
@@ -74,12 +78,20 @@ public class Material {
         this.diffuseMap = diffuseMap;
     }
 
+    public void setDiffuseMap(String filename) {
+        this.setDiffuseMap(filename == null ? null : new Texture(filename));
+    }
+
     public Texture getSpecularMap() {
         return specularMap;
     }
 
     public void setSpecularMap(Texture specularMap) {
         this.specularMap = specularMap;
+    }
+
+    public void setSpecularMap(String filename) {
+        this.setSpecularMap(filename == null ? null : new Texture(filename));
     }
 
     public float getOpacity() {

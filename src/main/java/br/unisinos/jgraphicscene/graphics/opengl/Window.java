@@ -28,8 +28,6 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
     private int width;
     private int height;
 
-    private Color background;
-
     private GLWindow window;
     private Animator animator;
 
@@ -41,24 +39,15 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
     private Dispatcher<Short, KeyEvent> keyEvents;
 
+
     public Window(String title, int width, int height) {
-        this(title, width, height, Colors.PETROL);
+        this(title, width, height, new Drawer());
     }
-
-    public Window(String title, int width, int height, Color background) {
-        this(title, width, height, background, new Drawer());
-    }
-
 
     public Window(String title, int width, int height, Drawer drawer) {
-        this(title, width, height, Colors.PETROL, drawer);
-    }
-
-    public Window(String title, int width, int height, Color background, Drawer drawer) {
         this.title = title;
         this.width = width;
         this.height = height;
-        this.background = background;
 
         this.camera = new Camera(this, INITIAL_POSITION);
         this.drawer = drawer == null ? new Drawer() : drawer;
@@ -89,14 +78,6 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
     public void setHeight(int height) {
         this.height = height;
         this.window.setSize(this.width, this.height);
-    }
-
-    public Color getBackground() {
-        return background;
-    }
-
-    public void setBackground(Color background) {
-        this.background = background;
     }
 
     public Drawer getDrawer() {
@@ -195,7 +176,7 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        this.getDrawer().draw(drawable.getGL().getGL4(), this.camera, this.background);
+        this.getDrawer().draw(drawable.getGL().getGL4(), this.camera);
     }
 
     @Override

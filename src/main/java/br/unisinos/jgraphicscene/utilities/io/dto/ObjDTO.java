@@ -1,5 +1,6 @@
 package br.unisinos.jgraphicscene.utilities.io.dto;
 
+import br.unisinos.jgraphicscene.graphics.Material;
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
 import br.unisinos.jgraphicscene.obj.Obj;
 import br.unisinos.jgraphicscene.utilities.Classes;
@@ -8,6 +9,8 @@ import br.unisinos.jgraphicscene.utilities.pools.ObjPool;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.Map;
 
 import static java.util.Map.Entry;
@@ -29,7 +32,10 @@ public class ObjDTO implements DTO<Obj> {
         obj.getMaterials().removeIf(material -> materials.containsKey(material.getName()));
 
         for (Entry<String, MaterialDTO> entry : materials.entrySet()) {
-            obj.addMaterial(entry.getValue().transferWithName(entry.getKey()));
+            String name = entry.getKey();
+            MaterialDTO material = entry.getValue();
+
+            obj.addMaterial(material.transferForConfiguration(name));
         }
     }
 

@@ -20,6 +20,9 @@ import java.nio.IntBuffer;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import static br.unisinos.jgraphicscene.utilities.constants.Semantic.Attribute.NORMAL;
+import static br.unisinos.jgraphicscene.utilities.constants.Semantic.Attribute.POSITION;
+import static br.unisinos.jgraphicscene.utilities.constants.Semantic.Attribute.TEXCOORD;
 import static com.jogamp.opengl.GL.GL_ARRAY_BUFFER;
 import static com.jogamp.opengl.GL.GL_DEPTH_TEST;
 import static com.jogamp.opengl.GL.GL_ELEMENT_ARRAY_BUFFER;
@@ -100,7 +103,6 @@ public class Drawer extends Ring<Scene> {
         gl.glGenBuffers(2, this.buffers);
 
         this.bindVBO(gl);
-        this.bindMatrices(gl);
 
         OpenGL.checkError(gl);
     }
@@ -111,14 +113,6 @@ public class Drawer extends Ring<Scene> {
         gl.glBindBuffer(GL_ARRAY_BUFFER, this.getVBO());
         gl.glBufferData(GL_ARRAY_BUFFER, vertexBuffer.capacity() * Float.BYTES, vertexBuffer, GL_STATIC_DRAW);
         gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
-    private void bindMatrices(GL4 gl) {
-        gl.glBindBuffer(GL_UNIFORM_BUFFER, this.getMatrices());
-        gl.glBufferData(GL_UNIFORM_BUFFER, 16 * Float.BYTES * 2, null, GL_STREAM_DRAW);
-        gl.glBindBuffer(GL_UNIFORM_BUFFER, 0);
-
-        gl.glBindBufferBase(GL_UNIFORM_BUFFER, Semantic.Uniform.GLOBAL_MATRICES, this.getMatrices());
     }
 
     private void bindChunk(GL4 gl, Chunk chunk) {
@@ -161,18 +155,18 @@ public class Drawer extends Ring<Scene> {
                 int stride = (positionThreshold + normalThreshold + textureThreshold) * Float.BYTES;
                 int offset = 0;
 
-                gl.glEnableVertexAttribArray(Semantic.Attribute.POSITION);
-                gl.glVertexAttribPointer(Semantic.Attribute.POSITION, positionThreshold, GL_FLOAT, false, stride, offset);
+                gl.glVertexAttribPointer(POSITION, positionThreshold, GL_FLOAT, false, stride, offset);
+                gl.glEnableVertexAttribArray(POSITION);
 
                 offset += positionThreshold * Float.BYTES;
 
-                gl.glEnableVertexAttribArray(Semantic.Attribute.NORMAL);
-                gl.glVertexAttribPointer(Semantic.Attribute.NORMAL, normalThreshold, GL_FLOAT, false, stride, offset);
+                gl.glVertexAttribPointer(NORMAL, normalThreshold, GL_FLOAT, false, stride, offset);
+                gl.glEnableVertexAttribArray(NORMAL);
 
                 offset += normalThreshold * Float.BYTES;
 
-                gl.glEnableVertexAttribArray(Semantic.Attribute.TEXCOORD);
-                gl.glVertexAttribPointer(Semantic.Attribute.TEXCOORD, textureThreshold, GL_FLOAT, false, stride, offset);
+                gl.glVertexAttribPointer(TEXCOORD, textureThreshold, GL_FLOAT, false, stride, offset);
+                gl.glEnableVertexAttribArray(TEXCOORD);
             }
 
             gl.glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -187,21 +181,17 @@ public class Drawer extends Ring<Scene> {
         return this.buffers.get(0);
     }
 
-    private int getMatrices() {
-        return this.buffers.get(1);
-    }
-
     private boolean hasChanges() {
         Scene scene = this.get();
         return scene != null && scene.hashCode() != this.hash;
     }
 
-    public void draw(GL4 gl, Camera camera, Color background) {
+    public void draw(GL4 gl, Camera camera) {
         if (this.hasChanges()) {
             this.initialize(gl);
         }
 
-        this.clearBuffers(gl, background);
+        this.clearBuffers(gl, this.get().getBackground());
 
         gl.glUseProgram(this.shader.getName());
 
@@ -213,7 +203,7 @@ public class Drawer extends Ring<Scene> {
             this.bindChunk(gl, chunk);
             this.bindTextures(gl, chunk.getMaterial());
 
-            gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+            gl.glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // todo Is this needed?
             gl.glDrawElements(Mode.GL_TRIANGLES, chunk.getSize(), GL_UNSIGNED_INT, 0);
         }
 
@@ -271,8 +261,8 @@ public class Drawer extends Ring<Scene> {
     }
 
     /**
-     * Load textures guarantees no texture will be loaded twice by filtering null textures or data-null textures,
-     * after loading a texture into the buffers, it then nullify its data, to free-up memory and prevent reloading.
+     * Load textures guarantees no texture will be loaded twice by filtering null textures or data-null textures.
+     * After loading a texture into the buffers, it then nullify its data, to free-up memory and prevent reloading.
      */
     private void loadTextures(GL4 gl, Material material) {
         List<Texture> textures = material.getTextures().stream().filter(t -> t != null && !t.isBound()).collect(Collectors.toList());
@@ -287,18 +277,16 @@ public class Drawer extends Ring<Scene> {
             Buffer buffer = data.getBuffer();
 
             gl.glBindTexture(GL_TEXTURE_2D, id);
+            gl.glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
             gl.glTexImage2D(GL_TEXTURE_2D, 0, data.getInternalFormat(), data.getWidth(), data.getHeight(), data.getBorder(), data.getInternalFormat(), GL_UNSIGNED_BYTE, buffer);
-
-            if (data.getMipmap()) {
-                gl.glGenerateMipmap(GL_TEXTURE_2D);
-            }
+            gl.glGenerateMipmap(GL_TEXTURE_2D);
 
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
             gl.glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-            //data.destroy();
+            data.destroy();
             texture.setId(id);
         }
 

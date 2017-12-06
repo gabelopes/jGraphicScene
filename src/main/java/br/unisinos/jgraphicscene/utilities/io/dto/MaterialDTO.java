@@ -5,6 +5,10 @@ import br.unisinos.jgraphicscene.graphics.Texture;
 import br.unisinos.jgraphicscene.units.Color;
 import br.unisinos.jgraphicscene.utilities.Classes;
 
+import java.io.File;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+
 public class MaterialDTO implements DTO<Material> {
     private Float[] ambientColor;
     private Float[] diffuseColor;
@@ -21,10 +25,28 @@ public class MaterialDTO implements DTO<Material> {
     private int illuminationModel;
 
     private String name;
+    private String path;
 
-    public Material transferWithName(String name) {
+    public Path getPath() {
+        return Paths.get(path);
+    }
+
+    public Material transferForConfiguration(String name) {
         this.name = name;
+
         return transfer();
+    }
+
+    private String resolvePath(String filename) {
+        if (filename == null) {
+            return null;
+        }
+
+        if (path == null) {
+            return name;
+        }
+
+        return getPath().resolve(filename).toString();
     }
 
     @Override
@@ -35,9 +57,9 @@ public class MaterialDTO implements DTO<Material> {
         material.setDiffuseColor(Classes.instance(Color.class, diffuseColor));
         material.setSpecularColor(Classes.instance(Color.class, specularColor));
 
-        material.setAmbientMap(new Texture(ambientMap));
-        material.setDiffuseMap(new Texture(diffuseMap));
-        material.setSpecularMap(new Texture(specularMap));
+        material.setAmbientMap(resolvePath(ambientMap));
+        material.setDiffuseMap(resolvePath(diffuseMap));
+        material.setSpecularMap(resolvePath(specularMap));
 
         material.setOpacity(opacity);
         material.setShininess(shininess);
