@@ -67,6 +67,10 @@ public class Obj {
         this.materials.add(material);
     }
 
+    public List<Material> getMaterials() {
+        return materials;
+    }
+
     public void setMaterials(List<Material> materials) {
         this.materials = materials;
     }

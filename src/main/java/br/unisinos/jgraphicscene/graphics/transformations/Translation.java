@@ -2,7 +2,6 @@ package br.unisinos.jgraphicscene.graphics.transformations;
 
 import br.unisinos.jgraphicscene.utilities.Time;
 import org.joml.Vector3f;
-import org.joml.Vector4f;
 
 public class Translation extends Transformation {
     protected float speed;

@@ -142,6 +142,7 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
         this.initSwitches();
         this.initDispatchers();
         this.drawer.initialize(drawable.getGL().getGL4());
+        this.updateTitle();
     }
 
     private void initSwitches() {
@@ -154,8 +155,15 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
 
         keyEvents.attach(VK_ESCAPE, e -> this.close());
 
-        keyEvents.attach(VK_LEFT, e -> this.getDrawer().previous());
-        keyEvents.attach(VK_RIGHT, e -> this.getDrawer().next());
+        keyEvents.attach(VK_LEFT, e -> {
+            this.getDrawer().previous();
+            this.updateTitle();
+        });
+
+        keyEvents.attach(VK_RIGHT, e -> {
+            this.getDrawer().next();
+            this.updateTitle();
+        });
 
         keyEvents.attach(VK_W, e -> this.camera.processKeyboard(Movement.FORWARD));
         keyEvents.attach(VK_A, e -> this.camera.processKeyboard(Movement.LEFT));
@@ -176,6 +184,13 @@ public class Window implements GLEventListener, KeyListener, MouseListener {
             this.transformations.deactivateAll();
             this.axes.deactivateAll();
         });
+    }
+
+    private void updateTitle() {
+        String sceneName = this.getDrawer().get().getName();
+        String name = sceneName == null ? "Untitled scene" : sceneName;
+
+        this.setTitle(name + " - jGraphicScene");
     }
 
     @Override

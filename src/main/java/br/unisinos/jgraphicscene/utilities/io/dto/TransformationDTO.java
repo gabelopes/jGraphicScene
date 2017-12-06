@@ -1,16 +1,48 @@
 package br.unisinos.jgraphicscene.utilities.io.dto;
 
 import br.unisinos.jgraphicscene.graphics.transformations.Transformation;
+import com.jsoniter.JsonIterator;
 import com.jsoniter.any.Any;
-
-import java.util.Map;
+import org.joml.Vector3f;
+import org.joml.Vector4f;
 
 public class TransformationDTO implements DTO<Transformation> {
-    private String clazz;
-    private Map<String, Any> properties;
+    private String name;
+    private Any properties;
+
+    private Vector3f translation;
+    private Vector4f rotation;
+    private Float scale;
+
+    public Transformation transferForConfiguration(Vector3f translation, Vector4f rotation, Float scale) {
+        this.translation = translation;
+        this.rotation = rotation;
+        this.scale = scale;
+
+        return transfer();
+    }
 
     @Override
     public Transformation transfer() {
-        return null;
+        try {
+            Class<DTO> clazz = (Class<DTO>) Class.forName(this.getClass().getPackage().getName() + ".transformations." + name + "DTO");
+            Transformation transformation = (Transformation) JsonIterator.deserialize(properties.toString(), clazz).transfer();
+
+            if (translation != null) {
+                transformation.setTranslation(translation);
+            }
+
+            if (rotation != null) {
+                transformation.setRotation(rotation);
+            }
+
+            if (scale != null) {
+                transformation.setScale(scale);
+            }
+
+            return transformation;
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

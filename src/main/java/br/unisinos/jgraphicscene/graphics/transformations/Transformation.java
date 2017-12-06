@@ -1,5 +1,6 @@
 package br.unisinos.jgraphicscene.graphics.transformations;
 
+import br.unisinos.jgraphicscene.utilities.Time;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
@@ -18,15 +19,29 @@ public class Transformation {
         this(translation, new Vector4f());
     }
 
+    public Transformation(Vector4f rotation) {
+        this(new Vector3f(), rotation);
+    }
+
     public Transformation(Vector3f translation, Vector4f rotation) {
         this(translation, rotation, 1);
     }
 
     public Transformation(Vector3f translation, Vector4f rotation, float scale) {
-        this.translation = translation;
-        this.rotation = rotation;
+        this.translation = translation == null ? new Vector3f() : translation;
+        this.rotation = rotation == null ? new Vector4f() : rotation;
         this.scale = scale;
+
+        this.normalize();
     }
+
+    private void normalize() {
+        if (rotation.x == 0 && rotation.x == rotation.y && rotation.y == rotation.z) {
+            rotation.x = 1;
+            rotation.w = 0;
+        }
+    }
+
 
     public Vector3f getTranslation() {
         return translation;
@@ -48,16 +63,16 @@ public class Transformation {
 
     public Transformation setRotation(Vector4f rotation) {
         this.rotation = rotation;
+        this.normalize();
         return this;
     }
 
     public Transformation setRotation(float x, float y, float z) {
-        return this.setRotation(0, x, y, z);
+        return this.setRotation(x, y, z, 0);
     }
 
-    public Transformation setRotation(float angle, float x, float y, float z) {
-        this.rotation = new Vector4f(x, y, z, angle);
-        return this;
+    public Transformation setRotation(float x, float y, float z, float angle) {
+        return this.setRotation(new Vector4f(x, y, z, angle));
     }
 
     public float getScale() {
